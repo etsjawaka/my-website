@@ -17,7 +17,6 @@
 	<nav class="site-nav">
 		<a href="/">Home</a>
 		<a href="/products">Products</a>
-		<a href="https://www.youtube.com/@galaxiuschaos" target="_blank" rel="noopener noreferrer">YouTube @galaxiuschaos</a>
 		<a href="mailto:post@ione.no">Contact</a>
 	</nav>
 </header>
