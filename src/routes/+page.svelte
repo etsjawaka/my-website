@@ -213,12 +213,15 @@
 
   .blog-section {
     margin: 0;
+    padding-top: 1.25rem;
+    border-top: 1px solid #9a9a9a;
     max-width: 560px;
   }
 
   .blog-section h2 {
     font-size: 1.5rem;
     margin-bottom: 1rem;
+    margin-top: 0;
   }
 
   .short-frame {
@@ -263,6 +266,10 @@
 
     .short-frame {
       max-width: 100%;
+    }
+
+    .blog-section {
+      padding-top: 1rem;
     }
   }
 
