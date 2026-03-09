@@ -116,8 +116,8 @@
 
 <style>
   main {
-    background: #d3d3d3;
-    color: #000;
+    background: var(--bg-color, #dedad0);
+    color: var(--text-color, #8a795d);
     min-height: 100vh;
     padding: clamp(1rem, 2.8vw, 2rem);
     font-family: sans-serif;
@@ -133,8 +133,8 @@
     height: var(--reel-height, 320px);
     overflow: hidden;
     border-radius: 8px;
-    border: 1px solid #999;
-    background: #c8c8c8;
+    border: 1px solid #b7b2a6;
+    background: #d7d2c7;
   }
 
   .slides {
@@ -195,7 +195,7 @@
 
   .controls button {
     background: transparent;
-    color: #000;
+    color: var(--text-color, #8a795d);
     border: 0;
     padding: 0.25rem 0.5rem;
     border-radius: 0;
@@ -211,7 +211,7 @@
   }
 
   a {
-    color: #000;
+    color: var(--text-color, #8a795d);
     text-decoration: none;
   }
 
@@ -236,10 +236,10 @@
     width: 100%;
     aspect-ratio: 9 / 16;
     max-width: 340px;
-    border: 1px solid #999;
+    border: 1px solid #b7b2a6;
     border-radius: 8px;
     overflow: hidden;
-    background: #c8c8c8;
+    background: #d7d2c7;
   }
 
   .short-frame iframe {
@@ -250,7 +250,7 @@
 
   .short-fallback {
     margin-top: 0.75rem;
-    color: #111;
+    color: var(--text-color, #8a795d);
     font-size: 0.95rem;
   }
 

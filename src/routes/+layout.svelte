@@ -31,9 +31,9 @@
 		gap: 0.75rem;
 		flex-wrap: wrap;
 		padding: 0.75rem 1rem;
-		background: #d3d3d3;
-		border-bottom: 1px solid #a9a9a9;
-		color: #000;
+		background: var(--bg-color);
+		border-bottom: 1px solid #b7b2a6;
+		color: var(--text-color);
 	}
 
 	.site-brand {
@@ -41,7 +41,7 @@
 		align-items: center;
 		gap: 0.75rem;
 		text-decoration: none;
-		color: #000;
+		color: var(--text-color);
 		cursor: pointer;
 	}
 
@@ -64,7 +64,7 @@
 	}
 
 	.site-nav a {
-		color: #000;
+		color: var(--text-color);
 		text-decoration: none;
 		padding: 0.5rem;
 		border-radius: 4px;
@@ -72,7 +72,7 @@
 	}
 
 	.site-nav a:hover {
-		background: #bfbfbf;
+		background: #d4d0c5;
 	}
 
 	.site-title {
@@ -81,13 +81,16 @@
 	}
 
 	:global(:root) {
-		--accent: #00eaff;
+		--bg-color: #dedad0;
+		--text-color: #8a795d;
+		--accent: #8a795d;
+		color-scheme: light;
 	}
 
 	:global(body) {
 		margin: 0;
-		background: #d3d3d3;
-		color: #000;
+		background: var(--bg-color);
+		color: var(--text-color);
 		overflow-x: hidden;
 	}
 

@@ -4,17 +4,17 @@
 
 <style>
   main {
-    background: #d3d3d3;
-    color: #000;
+    background: var(--bg-color, #dedad0);
+    color: var(--text-color, #8a795d);
     min-height: 100vh;
     padding: clamp(1rem, 2.8vw, 2rem);
     font-family: sans-serif;
   }
 
   .glass {
-    background: #ededed;
+    background: #ebe7dd;
     backdrop-filter: blur(10px);
-    border: 1px solid #a5a5a5;
+    border: 1px solid #b7b2a6;
     border-radius: 12px;
     padding: 2rem;
     max-width: 680px;
