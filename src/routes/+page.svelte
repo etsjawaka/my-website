@@ -124,25 +124,8 @@
   }
 
   .photo-reel {
-    margin-bottom: 1.5rem;
-  }
-
-  .content {
-    display: flex;
-    gap: 1.25rem;
-    align-items: flex-start;
-  }
-
-  .main-left {
-    flex: 1 1 auto;
-    min-width: 0;
-  }
-
-  .reel-container {
-    flex: 0 0 auto;
-    max-width: 480px;
-    width: 100%;
-    margin-left: auto;
+    margin-bottom: 2rem;
+    max-width: 560px;
   }
 
   .viewport {
@@ -228,17 +211,9 @@
     text-decoration: underline;
   }
 
-  .textbox {
-    margin: 2rem 0;
-    padding: 1rem;
-    background: #ededed;
-    border: 1px solid #a5a5a5;
-    border-radius: 6px;
-    min-height: 120px;
-  }
-
   .blog-section {
-    margin: 2rem 0;
+    margin: 0;
+    max-width: 560px;
   }
 
   .blog-section h2 {
@@ -269,29 +244,21 @@
   }
 
   @media (max-width: 980px) {
-    .reel-container {
-      max-width: 420px;
+    .photo-reel,
+    .blog-section {
+      max-width: 480px;
     }
   }
 
   @media (max-width: 700px) {
-    .content {
-      flex-direction: column;
-    }
-
-    .reel-container {
+    .photo-reel,
+    .blog-section {
       max-width: 100%;
-      margin-left: 0;
     }
 
     .viewport {
       height: 72vw;
       max-height: 320px;
-    }
-
-    .textbox,
-    .blog-section {
-      margin: 1.25rem 0;
     }
 
     .short-frame {
@@ -307,90 +274,80 @@
 </style>
 
 <main>
-  <div class="content">
-    <div class="main-left">
-      <div class="textbox">
-        Vikra Smie Tangen Tang
-      </div>
-
-      <section class="blog-section">
-        <h2>Latest YouTube Short</h2>
-        {#if latestShortEmbed}
-          <div class="short-frame">
-            <iframe
-              src={latestShortEmbed}
-              title="Latest YouTube Short from @galaxiuschaos"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-              allowfullscreen
-            ></iframe>
-          </div>
-        {:else}
-          <div class="short-fallback">
-            {latestShortError || 'Loading latest short...'}
-          </div>
-        {/if}
-        <div class="short-fallback">
-          <a href={latestShortWatch} target="_blank" rel="noopener noreferrer">Watch on YouTube</a>
+  <section class="photo-reel">
+    {#if photos.length === 0}
+      <div class="viewport">
+        <div
+          class="slide"
+          style="height:100%;display:flex;align-items:center;justify-content:center;color:#666"
+        >
+          Add images to /static/photos to populate the reel
         </div>
-      </section>
-    </div>
+      </div>
+    {:else}
+      <div
+        class="viewport"
+        role="region"
+        aria-label="Photo reel"
+        aria-live="polite"
+        on:mouseenter={stopAutoplay}
+        on:mouseleave={() => {
+          if (!lightboxOpen) startAutoplay();
+        }}
+        style="--reel-height: {reelHeight}px;"
+      >
+        <div class="slides" style="transform: translateX(-{current * 100}%);">
+          {#each photos as p, i}
+            <div class="slide">
+              <button
+                class="slide-button"
+                type="button"
+                on:click={() => openLightbox(i)}
+                aria-label={`Open photo ${i + 1} in lightbox`}
+              >
+                <img src={p.src} alt={p.caption} loading="lazy" />
+              </button>
+            </div>
+          {/each}
+        </div>
+      </div>
+      <div class="controls">
+        <button on:click={prev} aria-label="Previous">◀</button>
+        <button on:click={next} aria-label="Next">▶</button>
+      </div>
+      {#if lightboxOpen}
+        <div
+          class="lightbox"
+          role="dialog"
+          aria-modal="true"
+          tabindex="0"
+          on:click={closeLightbox}
+          on:keydown={handleLightboxKeydown}
+        >
+          <img src={photos[lightboxIndex].src} alt={photos[lightboxIndex].caption} />
+        </div>
+      {/if}
+    {/if}
+  </section>
 
-    <aside class="reel-container">
-      <section class="photo-reel">
-        {#if photos.length === 0}
-          <div class="viewport">
-            <div
-              class="slide"
-              style="height:100%;display:flex;align-items:center;justify-content:center;color:#666"
-            >
-              Add images to /static/photos to populate the reel
-            </div>
-          </div>
-        {:else}
-          <div
-            class="viewport"
-            role="region"
-            aria-label="Photo reel"
-            aria-live="polite"
-            on:mouseenter={stopAutoplay}
-            on:mouseleave={() => {
-              if (!lightboxOpen) startAutoplay();
-            }}
-            style="--reel-height: {reelHeight}px;"
-          >
-            <div class="slides" style="transform: translateX(-{current * 100}%);">
-              {#each photos as p, i}
-                <div class="slide">
-                  <button
-                    class="slide-button"
-                    type="button"
-                    on:click={() => openLightbox(i)}
-                    aria-label={`Open photo ${i + 1} in lightbox`}
-                  >
-                    <img src={p.src} alt={p.caption} loading="lazy" />
-                  </button>
-                </div>
-              {/each}
-            </div>
-          </div>
-          <div class="controls">
-            <button on:click={prev} aria-label="Previous">◀</button>
-            <button on:click={next} aria-label="Next">▶</button>
-          </div>
-          {#if lightboxOpen}
-            <div
-              class="lightbox"
-              role="dialog"
-              aria-modal="true"
-              tabindex="0"
-              on:click={closeLightbox}
-              on:keydown={handleLightboxKeydown}
-            >
-              <img src={photos[lightboxIndex].src} alt={photos[lightboxIndex].caption} />
-            </div>
-          {/if}
-        {/if}
-      </section>
-    </aside>
-  </div>
+  <section class="blog-section">
+    <h2>Latest YouTube Short</h2>
+    {#if latestShortEmbed}
+      <div class="short-frame">
+        <iframe
+          src={latestShortEmbed}
+          title="Latest YouTube Short from @galaxiuschaos"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          allowfullscreen
+        ></iframe>
+      </div>
+    {:else}
+      <div class="short-fallback">
+        {latestShortError || 'Loading latest short...'}
+      </div>
+    {/if}
+    <div class="short-fallback">
+      <a href={latestShortWatch} target="_blank" rel="noopener noreferrer">Watch on YouTube</a>
+    </div>
+  </section>
 </main>
