@@ -190,16 +190,24 @@
     display: flex;
     gap: 0.5rem;
     flex-wrap: wrap;
+    justify-content: center;
   }
 
   .controls button {
-    background: #ededed;
+    background: transparent;
     color: #000;
-    border: 1px solid #8e8e8e;
-    padding: 0.65rem 0.85rem;
-    border-radius: 6px;
+    border: 0;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0;
     cursor: pointer;
-    min-width: 48px;
+    min-width: 0;
+    font-size: 1.4rem;
+    line-height: 1;
+    font-weight: 700;
+  }
+
+  .controls button:hover {
+    opacity: 0.7;
   }
 
   a {
