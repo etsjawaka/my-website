@@ -31,9 +31,9 @@
 		gap: 0.75rem;
 		flex-wrap: wrap;
 		padding: 0.75rem 1rem;
-		background: #0a0a0f;
-		border-bottom: 1px solid #222;
-		color: #e6e6e6;
+		background: #d3d3d3;
+		border-bottom: 1px solid #a9a9a9;
+		color: #000;
 	}
 
 	.site-brand {
@@ -41,7 +41,7 @@
 		align-items: center;
 		gap: 0.75rem;
 		text-decoration: none;
-		color: #e6e6e6;
+		color: #000;
 		cursor: pointer;
 	}
 
@@ -64,7 +64,7 @@
 	}
 
 	.site-nav a {
-		color: #e6e6e6;
+		color: #000;
 		text-decoration: none;
 		padding: 0.5rem;
 		border-radius: 4px;
@@ -72,7 +72,7 @@
 	}
 
 	.site-nav a:hover {
-		background: #333;
+		background: #bfbfbf;
 	}
 
 	.site-title {
@@ -86,8 +86,8 @@
 
 	:global(body) {
 		margin: 0;
-		background: radial-gradient(circle at top, #0a0a0f, #000);
-		color: #e6e6e6;
+		background: #d3d3d3;
+		color: #000;
 		overflow-x: hidden;
 	}
 

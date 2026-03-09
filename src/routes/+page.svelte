@@ -116,8 +116,8 @@
 
 <style>
   main {
-    background: black;
-    color: white;
+    background: #d3d3d3;
+    color: #000;
     min-height: 100vh;
     padding: clamp(1rem, 2.8vw, 2rem);
     font-family: sans-serif;
@@ -150,8 +150,8 @@
     height: var(--reel-height, 320px);
     overflow: hidden;
     border-radius: 8px;
-    border: 1px solid #333;
-    background: #0b0b0b;
+    border: 1px solid #999;
+    background: #c8c8c8;
   }
 
   .slides {
@@ -210,9 +210,9 @@
   }
 
   .controls button {
-    background: #111;
-    color: #fff;
-    border: 1px solid #333;
+    background: #ededed;
+    color: #000;
+    border: 1px solid #8e8e8e;
     padding: 0.65rem 0.85rem;
     border-radius: 6px;
     cursor: pointer;
@@ -220,7 +220,7 @@
   }
 
   a {
-    color: #66aaff;
+    color: #000;
     text-decoration: none;
   }
 
@@ -231,8 +231,8 @@
   .textbox {
     margin: 2rem 0;
     padding: 1rem;
-    background: #222;
-    border: 1px solid #444;
+    background: #ededed;
+    border: 1px solid #a5a5a5;
     border-radius: 6px;
     min-height: 120px;
   }
@@ -250,10 +250,10 @@
     width: 100%;
     aspect-ratio: 9 / 16;
     max-width: 340px;
-    border: 1px solid #333;
+    border: 1px solid #999;
     border-radius: 8px;
     overflow: hidden;
-    background: #111;
+    background: #c8c8c8;
   }
 
   .short-frame iframe {
@@ -264,7 +264,7 @@
 
   .short-fallback {
     margin-top: 0.75rem;
-    color: #bbb;
+    color: #111;
     font-size: 0.95rem;
   }
 
