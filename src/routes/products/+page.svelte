@@ -15,7 +15,7 @@
   main {
     color: #e6e6e6;
     min-height: 100vh;
-    padding: 2rem;
+    padding: clamp(1rem, 2.8vw, 2rem);
     font-family: sans-serif;
   }
 
@@ -25,7 +25,7 @@
 
   .block {
     margin-bottom: 2rem;
-    padding: 8rem 2rem;
+    padding: clamp(2rem, 8vw, 8rem) clamp(1rem, 3vw, 2rem);
     max-width: 1200px;
     margin: 0 auto;
   }
@@ -47,7 +47,7 @@
   }
 
   img {
-    width: 250px;
+    width: min(100%, 250px);
     border: 2px solid #444;
     border-radius: 6px;
     margin-top: 0.5rem;
@@ -62,20 +62,31 @@
   }
 
   .hero {
-    padding: 10rem 2rem;
+    padding: clamp(2.5rem, 10vw, 10rem) clamp(1rem, 3vw, 2rem);
     text-align: center;
   }
 
   .features {
     display: grid;
     gap: 2rem;
-    padding: 6rem 2rem;
+    padding: clamp(2rem, 8vw, 6rem) clamp(1rem, 3vw, 2rem);
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   }
 
   .card {
     padding: 2rem;
     border-radius: 12px;
+  }
+
+  @media (max-width: 600px) {
+    .features {
+      grid-template-columns: 1fr;
+      gap: 1rem;
+    }
+
+    .card {
+      padding: 1.25rem;
+    }
   }
 </style>
 

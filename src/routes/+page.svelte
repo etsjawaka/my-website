@@ -21,7 +21,7 @@
     return filename
       .replace(/\.[^.]+$/, '')
       .replace(/[-_]/g, ' ')
-        .replace(/\b\w/g, (c: string) => c.toUpperCase());
+      .replace(/\b\w/g, (c: string) => c.toUpperCase());
   }
 
   function startAutoplay() {
@@ -110,7 +110,6 @@
 
   function closeLightbox() {
     lightboxOpen = false;
-    // resume autoplay if appropriate
     if (photos.length > 1) startAutoplay();
   }
 </script>
@@ -120,18 +119,17 @@
     background: black;
     color: white;
     min-height: 100vh;
-    padding: 2rem;
+    padding: clamp(1rem, 2.8vw, 2rem);
     font-family: sans-serif;
   }
 
-  /* photo reel */
   .photo-reel {
     margin-bottom: 1.5rem;
   }
 
   .content {
     display: flex;
-    gap: 2rem;
+    gap: 1.25rem;
     align-items: flex-start;
   }
 
@@ -186,7 +184,6 @@
     cursor: zoom-in;
   }
 
-  /* lightbox */
   .lightbox {
     position: fixed;
     inset: 0;
@@ -209,15 +206,17 @@
     margin-top: 0.5rem;
     display: flex;
     gap: 0.5rem;
+    flex-wrap: wrap;
   }
 
   .controls button {
     background: #111;
     color: #fff;
     border: 1px solid #333;
-    padding: 0.5rem 0.75rem;
+    padding: 0.65rem 0.85rem;
     border-radius: 6px;
     cursor: pointer;
+    min-width: 48px;
   }
 
   a {
@@ -250,7 +249,7 @@
   .short-frame {
     width: 100%;
     aspect-ratio: 9 / 16;
-    max-width: 380px;
+    max-width: 340px;
     border: 1px solid #333;
     border-radius: 8px;
     overflow: hidden;
@@ -269,13 +268,40 @@
     font-size: 0.95rem;
   }
 
+  @media (max-width: 980px) {
+    .reel-container {
+      max-width: 420px;
+    }
+  }
+
   @media (max-width: 700px) {
     .content {
-      flex-direction: column-reverse;
+      flex-direction: column;
     }
 
     .reel-container {
       max-width: 100%;
+      margin-left: 0;
+    }
+
+    .viewport {
+      height: 72vw;
+      max-height: 320px;
+    }
+
+    .textbox,
+    .blog-section {
+      margin: 1.25rem 0;
+    }
+
+    .short-frame {
+      max-width: 100%;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .blog-section h2 {
+      font-size: 1.2rem;
     }
   }
 </style>
@@ -285,7 +311,6 @@
     <div class="main-left">
       <div class="textbox">
         Vikra Smie Tangen Tang
-
       </div>
 
       <section class="blog-section">
@@ -308,23 +333,40 @@
           <a href={latestShortWatch} target="_blank" rel="noopener noreferrer">Watch on YouTube</a>
         </div>
       </section>
-
     </div>
 
     <aside class="reel-container">
       <section class="photo-reel">
         {#if photos.length === 0}
           <div class="viewport">
-            <div class="slide" style="height:100%;display:flex;align-items:center;justify-content:center;color:#666">
+            <div
+              class="slide"
+              style="height:100%;display:flex;align-items:center;justify-content:center;color:#666"
+            >
               Add images to /static/photos to populate the reel
             </div>
           </div>
         {:else}
-          <div class="viewport" role="region" aria-label="Photo reel" aria-live="polite" on:mouseenter={stopAutoplay} on:mouseleave={() => { if (!lightboxOpen) startAutoplay(); }} style="--reel-height: {reelHeight}px;">
+          <div
+            class="viewport"
+            role="region"
+            aria-label="Photo reel"
+            aria-live="polite"
+            on:mouseenter={stopAutoplay}
+            on:mouseleave={() => {
+              if (!lightboxOpen) startAutoplay();
+            }}
+            style="--reel-height: {reelHeight}px;"
+          >
             <div class="slides" style="transform: translateX(-{current * 100}%);">
               {#each photos as p, i}
                 <div class="slide">
-                  <button class="slide-button" type="button" on:click={() => openLightbox(i)} aria-label={`Open photo ${i + 1} in lightbox`}>
+                  <button
+                    class="slide-button"
+                    type="button"
+                    on:click={() => openLightbox(i)}
+                    aria-label={`Open photo ${i + 1} in lightbox`}
+                  >
                     <img src={p.src} alt={p.caption} loading="lazy" />
                   </button>
                 </div>
@@ -336,7 +378,14 @@
             <button on:click={next} aria-label="Next">▶</button>
           </div>
           {#if lightboxOpen}
-            <div class="lightbox" role="dialog" aria-modal="true" tabindex="0" on:click={closeLightbox} on:keydown={handleLightboxKeydown}>
+            <div
+              class="lightbox"
+              role="dialog"
+              aria-modal="true"
+              tabindex="0"
+              on:click={closeLightbox}
+              on:keydown={handleLightboxKeydown}
+            >
               <img src={photos[lightboxIndex].src} alt={photos[lightboxIndex].caption} />
             </div>
           {/if}

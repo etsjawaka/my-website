@@ -29,6 +29,8 @@
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
+		gap: 0.75rem;
+		flex-wrap: wrap;
 		padding: 0.75rem 1rem;
 		background: #0a0a0f;
 		border-bottom: 1px solid #222;
@@ -58,6 +60,8 @@
 	.site-nav {
 		display: flex;
 		gap: 1rem;
+		flex-wrap: wrap;
+		justify-content: flex-end;
 	}
 
 	.site-nav a {
@@ -82,7 +86,40 @@
 	}
 
 	:global(body) {
+		margin: 0;
 		background: radial-gradient(circle at top, #0a0a0f, #000);
 		color: #e6e6e6;
+		overflow-x: hidden;
+	}
+
+	:global(*) {
+		box-sizing: border-box;
+	}
+
+	@media (max-width: 860px) {
+		.site-header {
+			align-items: flex-start;
+		}
+
+		.site-nav {
+			width: 100%;
+			justify-content: flex-start;
+			gap: 0.5rem;
+		}
+
+		.site-nav a {
+			padding: 0.45rem 0.55rem;
+		}
+	}
+
+	@media (max-width: 520px) {
+		.site-title {
+			font-size: 1rem;
+		}
+
+		.site-logo {
+			width: 34px;
+			height: 34px;
+		}
 	}
 </style>
