@@ -47,9 +47,13 @@
     </Canvas>
 
     {#if hoveredHotspot}
-      <div class="hover-label" style={`left:${hoveredHotspot.x}px;top:${hoveredHotspot.y}px;`}>
+      <a
+        class="hover-label"
+        style={`left:${hoveredHotspot.x}px;top:${hoveredHotspot.y}px;`}
+        href={hoveredHotspot.href}
+      >
         {hoveredHotspot.label}
-      </div>
+      </a>
     {/if}
   </div>
 </section>
@@ -87,8 +91,15 @@
     padding: 0.5rem 0.75rem;
     font-size: 0.88rem;
     font-weight: 700;
-    pointer-events: none;
+    pointer-events: auto;
     backdrop-filter: blur(10px);
+    text-decoration: none;
+    line-height: 1;
+    cursor: pointer;
+  }
+
+  .hover-label:hover {
+    background: rgba(255, 255, 255, 0.98);
   }
 
   @media (max-width: 680px) {
