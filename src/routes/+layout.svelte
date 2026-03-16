@@ -1,5 +1,6 @@
 <script lang="ts">
 	import favicon from '$lib/assets/favicon.svg';
+	import { page } from '$app/state';
 
 	let { children } = $props();
 </script>
@@ -9,19 +10,21 @@
 	<link rel="icon" href={favicon} />
 </svelte:head>
 
-<header class="site-header">
-	<a href="/" class="site-brand">
-		<img src="/logo.jpg" alt="ione:forge logo" class="site-logo" />
-		<div class="site-title">ione:forge</div>
-	</a>
-	<nav class="site-nav">
-		<a href="/">Home</a>
-		<a href="/about">About</a>
-		<a href="/art-cv">Art CV</a>
-		<a href="/products">Products</a>
-		<a href="/contact">Contact</a>
-	</nav>
-</header>
+{#if page.url.pathname !== '/'}
+	<header class="site-header">
+		<a href="/" class="site-brand">
+			<img src="/logo.jpg" alt="ione:forge logo" class="site-logo" />
+			<div class="site-title">ione:forge</div>
+		</a>
+		<nav class="site-nav">
+			<a href="/">Home</a>
+			<a href="/about">About</a>
+			<a href="/art-cv">CV</a>
+			<a href="/blog">Blog</a>
+			<a href="/contact">Contact</a>
+		</nav>
+	</header>
+{/if}
 
 {@render children()}
 

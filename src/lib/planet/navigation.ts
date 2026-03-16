@@ -28,13 +28,13 @@ export const PLANET_NAV_ITEMS: PlanetNavItem[] = [
     description: 'Direct ways to get in touch.'
   },
   {
-    label: 'Art CV',
+    label: 'CV',
     href: '/art-cv',
     description: 'Practice summary and CV structure.'
   },
   {
-    label: 'Products',
-    href: '/products',
-    description: 'Objects and product-facing page.'
+    label: 'Blog',
+    href: '/blog',
+    description: 'Writing, notes and latest updates.'
   }
 ];
