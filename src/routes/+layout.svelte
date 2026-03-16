@@ -16,8 +16,10 @@
 	</a>
 	<nav class="site-nav">
 		<a href="/">Home</a>
+		<a href="/about">About</a>
+		<a href="/art-cv">Art CV</a>
 		<a href="/products">Products</a>
-		<a href="mailto:post@ione.no">Contact</a>
+		<a href="/contact">Contact</a>
 	</nav>
 </header>
 
@@ -81,7 +83,7 @@
 	}
 
 	:global(:root) {
-		--bg-color: #dedad0;
+		--bg-color: #e8e8e5;
 		--text-color: #8a795d;
 		--accent: #8a795d;
 		color-scheme: light;
