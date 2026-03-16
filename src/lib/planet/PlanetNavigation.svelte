@@ -14,7 +14,7 @@
   }
 
   $: hoveredHotspot =
-    hoveredIndex !== null && hotspots[hoveredIndex] && hotspots[hoveredIndex].visible
+    hoveredIndex !== null && hotspots[hoveredIndex]
       ? hotspots[hoveredIndex]
       : null;
 </script>
@@ -78,6 +78,7 @@
 
   .hover-label {
     position: absolute;
+    z-index: 2;
     transform: translate(-50%, -50%);
     border: 1px solid rgba(117, 98, 68, 0.55);
     border-radius: 999px;

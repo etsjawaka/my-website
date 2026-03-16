@@ -192,10 +192,10 @@
         const visible =
           worldPosition.z > -1 &&
           worldPosition.z < 1 &&
-          worldPosition.x > -1.15 &&
-          worldPosition.x < 1.15 &&
-          worldPosition.y > -1.15 &&
-          worldPosition.y < 1.15;
+          worldPosition.x > -1.5 &&
+          worldPosition.x < 1.5 &&
+          worldPosition.y > -1.5 &&
+          worldPosition.y < 1.5;
 
         return {
           ...items[index],
