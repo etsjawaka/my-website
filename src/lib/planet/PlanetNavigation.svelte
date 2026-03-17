@@ -1,19 +1,40 @@
 <script lang="ts">
+  import { goto } from '$app/navigation';
   import { Canvas, T } from '@threlte/core';
   import { OrbitControls } from '@threlte/extras';
   import PlanetScene from '$lib/planet/PlanetScene.svelte';
-  import { PLANET_NAV_ITEMS } from '$lib/planet/navigation';
+  import { PLANET_NAV_ITEMS, type PlanetHotspot } from '$lib/planet/navigation';
 
   let hoveredIndex: number | null = null;
-  let hoverX = 0;
-  let hoverY = 0;
+  let hotspots: PlanetHotspot[] = [];
   let status = '';
   let loadError = '';
+
+  function handleHotspotsChange(nextHotspots: PlanetHotspot[]) {
+    hotspots = nextHotspots;
+  }
+
+  function handleHotspotEnter(index: number) {
+    hoveredIndex = index;
+  }
+
+  function handleHotspotLeave(index: number) {
+    if (hoveredIndex === index) hoveredIndex = null;
+  }
+
+  function openHotspot(index: number) {
+    const item = PLANET_NAV_ITEMS[index];
+    if (!item) return;
+    goto(item.href);
+  }
 
   $: hoveredItem =
     hoveredIndex !== null && PLANET_NAV_ITEMS[hoveredIndex]
       ? PLANET_NAV_ITEMS[hoveredIndex]
       : null;
+
+  $: hoveredHotspot =
+    hoveredIndex !== null && hotspots[hoveredIndex] ? hotspots[hoveredIndex] : null;
 </script>
 
 <section class="planet-shell">
@@ -37,15 +58,28 @@
       <PlanetScene
         items={PLANET_NAV_ITEMS}
         bind:hoveredIndex
-        bind:hoverX
-        bind:hoverY
         bind:status
         bind:loadError
+        onHotspotsChange={handleHotspotsChange}
       />
     </Canvas>
 
-    {#if hoveredItem}
-      <div class="hover-label" style={`left:${hoverX}px;top:${hoverY - 24}px;`}>
+    {#each hotspots as hotspot (hotspot.index)}
+      {#if hotspot.visible}
+        <button
+          class="hotspot-hit"
+          style={`left:${hotspot.x}px;top:${hotspot.y}px;`}
+          aria-label={`Open ${hotspot.label}`}
+          on:mouseenter={() => handleHotspotEnter(hotspot.index)}
+          on:mouseleave={() => handleHotspotLeave(hotspot.index)}
+          on:pointerdown={() => handleHotspotEnter(hotspot.index)}
+          on:click={() => openHotspot(hotspot.index)}
+        ></button>
+      {/if}
+    {/each}
+
+    {#if hoveredItem && hoveredHotspot}
+      <div class="hover-label" style={`left:${hoveredHotspot.x}px;top:${hoveredHotspot.y - 24}px;`}>
         {hoveredItem.label}
       </div>
     {/if}
@@ -100,6 +134,19 @@
     box-shadow: 0 8px 18px rgba(44, 37, 25, 0.18);
   }
 
+  .hotspot-hit {
+    position: absolute;
+    width: 64px;
+    height: 64px;
+    transform: translate(-50%, -50%);
+    border: 0;
+    border-radius: 999px;
+    background: transparent;
+    cursor: pointer;
+    z-index: 1;
+    padding: 0;
+  }
+
   .hover-banner {
     position: absolute;
     left: 50%;
@@ -132,6 +179,11 @@
   }
 
   @media (max-width: 680px) {
+    .hotspot-hit {
+      width: 72px;
+      height: 72px;
+    }
+
     .hover-label {
       font-size: 0.8rem;
       padding: 0.42rem 0.62rem;

@@ -1,15 +1,12 @@
 <script lang="ts">
   import { onMount } from 'svelte';
-  import { goto } from '$app/navigation';
   import { T, useTask, useThrelte } from '@threlte/core';
   import { useGltf, type ThrelteGltf } from '@threlte/extras';
-  import { Mesh, MeshBasicMaterial, MeshStandardMaterial, Object3D, Raycaster, Vector2, Vector3 } from 'three';
+  import { Mesh, MeshBasicMaterial, MeshStandardMaterial, Object3D, Vector3 } from 'three';
   import type { PlanetHotspot, PlanetNavItem } from '$lib/planet/navigation';
 
   export let items: PlanetNavItem[] = [];
   export let hoveredIndex: number | null = null;
-  export let hoverX = 0;
-  export let hoverY = 0;
   export let status = 'Loading planet model...';
   export let loadError = '';
   export let onHotspotsChange: (hotspots: PlanetHotspot[]) => void = () => {};
@@ -18,13 +15,9 @@
   let mounted = false;
   let planetRoot: Object3D | null = null;
   let clickTargets: Object3D[] = [];
-  let pointerDownX = 0;
-  let pointerDownY = 0;
 
   const loader = useGltf();
   const { camera, dom, invalidate } = useThrelte();
-  const raycaster = new Raycaster();
-  const pointer = new Vector2();
   const worldPosition = new Vector3();
   const desiredScale = new Vector3();
   const baseScales = new Map<Object3D, Vector3>();
@@ -123,103 +116,6 @@
     }
   }
 
-  function setPointerFromEvent(event: PointerEvent | MouseEvent) {
-    const bounds = dom.getBoundingClientRect();
-    hoverX = event.clientX - bounds.left;
-    hoverY = event.clientY - bounds.top;
-    pointer.x = ((event.clientX - bounds.left) / bounds.width) * 2 - 1;
-    pointer.y = -((event.clientY - bounds.top) / bounds.height) * 2 + 1;
-  }
-
-  function findTargetIndex(object: Object3D | null) {
-    let currentObject = object;
-
-    while (currentObject) {
-      const index = clickTargets.indexOf(currentObject);
-      if (index !== -1) return index;
-      currentObject = currentObject.parent;
-    }
-
-    return -1;
-  }
-
-  function pickTarget(event: PointerEvent | MouseEvent) {
-    if (!clickTargets.length) return -1;
-
-    setPointerFromEvent(event);
-    raycaster.setFromCamera(pointer, camera.current);
-
-    const intersections = raycaster.intersectObjects(clickTargets, true);
-    if (intersections.length) {
-      return findTargetIndex(intersections[0].object);
-    }
-
-    // Fallback: pick nearest projected child center to make hover/click more forgiving.
-    const bounds = dom.getBoundingClientRect();
-    const px = event.clientX - bounds.left;
-    const py = event.clientY - bounds.top;
-
-    let nearestIndex = -1;
-    let nearestDistance = Number.POSITIVE_INFINITY;
-
-    clickTargets.forEach((target, index) => {
-      worldPosition.setFromMatrixPosition(target.matrixWorld).project(camera.current);
-
-      if (worldPosition.z <= -1 || worldPosition.z >= 1) return;
-
-      const tx = (worldPosition.x * 0.5 + 0.5) * bounds.width;
-      const ty = (-worldPosition.y * 0.5 + 0.5) * bounds.height;
-      const distance = Math.hypot(px - tx, py - ty);
-
-      if (distance < nearestDistance) {
-        nearestDistance = distance;
-        nearestIndex = index;
-      }
-    });
-
-    return nearestDistance <= 260 ? nearestIndex : -1;
-  }
-
-  function updateCursor() {
-    dom.style.cursor = hoveredIndex === null ? 'grab' : 'pointer';
-  }
-
-  function handlePointerDown(event: PointerEvent) {
-    pointerDownX = event.clientX;
-    pointerDownY = event.clientY;
-
-    const index = pickTarget(event);
-    hoveredIndex = index === -1 ? null : index;
-
-    dom.style.cursor = 'grabbing';
-  }
-
-  function handlePointerMove(event: PointerEvent) {
-    const index = pickTarget(event);
-    hoveredIndex = index === -1 ? null : index;
-    updateCursor();
-  }
-
-  function handlePointerLeave() {
-    hoveredIndex = null;
-    hoverX = 0;
-    hoverY = 0;
-    dom.style.cursor = 'grab';
-  }
-
-  function handlePointerUp(event: PointerEvent) {
-    const moved = Math.hypot(event.clientX - pointerDownX, event.clientY - pointerDownY);
-    const index = pickTarget(event);
-
-    // Treat small pointer movement as an intentional click/tap on a child object.
-    if (moved <= 18 && index >= 0 && items[index]) {
-      goto(items[index].href);
-      return;
-    }
-
-    updateCursor();
-  }
-
   function updateHotspots() {
     if (!mounted || !clickTargets.length) return;
 
@@ -284,19 +180,8 @@
     resetHotspots();
     loadModel();
 
-    dom.style.cursor = 'grab';
-    dom.addEventListener('pointerdown', handlePointerDown);
-    dom.addEventListener('pointermove', handlePointerMove);
-    dom.addEventListener('pointerleave', handlePointerLeave);
-    dom.addEventListener('pointerup', handlePointerUp);
-
     return () => {
       mounted = false;
-      dom.removeEventListener('pointerdown', handlePointerDown);
-      dom.removeEventListener('pointermove', handlePointerMove);
-      dom.removeEventListener('pointerleave', handlePointerLeave);
-      dom.removeEventListener('pointerup', handlePointerUp);
-      dom.style.cursor = 'auto';
       resetHotspots();
     };
   });
