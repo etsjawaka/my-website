@@ -177,7 +177,7 @@
       }
     });
 
-    return nearestDistance <= 150 ? nearestIndex : -1;
+    return nearestDistance <= 260 ? nearestIndex : -1;
   }
 
   function updateCursor() {
