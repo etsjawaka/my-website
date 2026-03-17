@@ -53,7 +53,7 @@
     {#if hoveredHotspot}
       <a
         class="hover-label"
-        style={`left:${hoverX}px;top:${hoverY - 24}px;`}
+        style={`left:${hoveredHotspot.x || hoverX}px;top:${(hoveredHotspot.y || hoverY) - 24}px;`}
         href={hoveredHotspot.href}
       >
         {hoveredHotspot.label}

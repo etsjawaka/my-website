@@ -1,5 +1,8 @@
-<script lang="ts">
-  import AboutShowcase from '$lib/content/AboutShowcase.svelte';
-</script>
+<main aria-label="About page"></main>
 
-<AboutShowcase />
+<style>
+  main {
+    min-height: calc(100vh - 77px);
+    background: var(--bg-color, #e8e8e5);
+  }
+</style>

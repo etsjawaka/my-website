@@ -157,6 +157,13 @@
   function handlePointerDown(event: PointerEvent) {
     pointerDownX = event.clientX;
     pointerDownY = event.clientY;
+
+    // On touch devices, treat press as hover to surface the child label.
+    if (event.pointerType === 'touch') {
+      const index = pickTarget(event);
+      hoveredIndex = index === -1 ? null : index;
+    }
+
     dom.style.cursor = 'grabbing';
   }
 
