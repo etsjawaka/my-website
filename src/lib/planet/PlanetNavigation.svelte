@@ -6,6 +6,8 @@
 
   let hotspots: PlanetHotspot[] = [];
   let hoveredIndex: number | null = null;
+  let hoverX = 0;
+  let hoverY = 0;
   let status = '';
   let loadError = '';
 
@@ -40,6 +42,8 @@
       <PlanetScene
         items={PLANET_NAV_ITEMS}
         bind:hoveredIndex
+        bind:hoverX
+        bind:hoverY
         bind:status
         bind:loadError
         onHotspotsChange={handleHotspotsChange}
@@ -49,7 +53,7 @@
     {#if hoveredHotspot}
       <a
         class="hover-label"
-        style={`left:${hoveredHotspot.x}px;top:${hoveredHotspot.y}px;`}
+        style={`left:${hoverX}px;top:${hoverY - 24}px;`}
         href={hoveredHotspot.href}
       >
         {hoveredHotspot.label}

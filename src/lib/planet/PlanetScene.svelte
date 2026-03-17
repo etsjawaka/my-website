@@ -8,6 +8,8 @@
 
   export let items: PlanetNavItem[] = [];
   export let hoveredIndex: number | null = null;
+  export let hoverX = 0;
+  export let hoverY = 0;
   export let status = 'Loading planet model...';
   export let loadError = '';
   export let onHotspotsChange: (hotspots: PlanetHotspot[]) => void = () => {};
@@ -118,6 +120,8 @@
 
   function setPointerFromEvent(event: PointerEvent | MouseEvent) {
     const bounds = dom.getBoundingClientRect();
+    hoverX = event.clientX - bounds.left;
+    hoverY = event.clientY - bounds.top;
     pointer.x = ((event.clientX - bounds.left) / bounds.width) * 2 - 1;
     pointer.y = -((event.clientY - bounds.top) / bounds.height) * 2 + 1;
   }
@@ -164,6 +168,8 @@
 
   function handlePointerLeave() {
     hoveredIndex = null;
+    hoverX = 0;
+    hoverY = 0;
     dom.style.cursor = 'grab';
   }
 
@@ -172,7 +178,7 @@
   }
 
   function handleClick(event: MouseEvent) {
-    if (Math.hypot(event.clientX - pointerDownX, event.clientY - pointerDownY) > 6) return;
+    if (Math.hypot(event.clientX - pointerDownX, event.clientY - pointerDownY) > 10) return;
 
     const index = pickTarget(event);
     if (index < 0 || !items[index]) return;
@@ -212,8 +218,8 @@
     (delta: number) => {
       if (!planetRoot) return;
 
-      planetRoot.rotation.y += delta * 0.18;
-      planetRoot.rotation.z += delta * 0.04;
+      planetRoot.rotation.y += delta * 0.1;
+      planetRoot.rotation.z += delta * 0.022;
 
       clickTargets.forEach((target, index) => {
         const baseScale = baseScales.get(target);
