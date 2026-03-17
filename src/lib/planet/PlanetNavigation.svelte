@@ -49,6 +49,14 @@
         {hoveredItem.label}
       </div>
     {/if}
+
+    <div class="hover-banner" class:active={Boolean(hoveredItem)}>
+      {#if hoveredItem}
+        {hoveredItem.label}
+      {:else}
+        Hover a child object
+      {/if}
+    </div>
   </div>
 </section>
 
@@ -90,6 +98,31 @@
     line-height: 1;
     white-space: nowrap;
     box-shadow: 0 8px 18px rgba(44, 37, 25, 0.18);
+  }
+
+  .hover-banner {
+    position: absolute;
+    left: 50%;
+    bottom: clamp(1rem, 2.4vw, 1.8rem);
+    transform: translateX(-50%);
+    z-index: 2;
+    border: 1px solid rgba(117, 98, 68, 0.42);
+    border-radius: 999px;
+    background: rgba(248, 246, 241, 0.74);
+    color: #7c6a4d;
+    padding: 0.45rem 0.9rem;
+    font-size: 0.82rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    pointer-events: none;
+    transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+  }
+
+  .hover-banner.active {
+    border-color: rgba(117, 98, 68, 0.62);
+    background: rgba(248, 246, 241, 0.96);
+    color: #5d4f3b;
   }
 
   @media (max-width: 680px) {

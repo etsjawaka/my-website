@@ -1,7 +1,6 @@
 <script lang="ts">
 	import favicon from '$lib/assets/favicon.svg';
 	import { page } from '$app/state';
-	import MiniPlanet from '$lib/planet/MiniPlanet.svelte';
 
 	let { children } = $props();
 </script>
@@ -28,12 +27,6 @@
 {/if}
 
 {@render children()}
-
-{#if page.url.pathname !== '/'}
-	<a class="mini-planet-wrap" href="/" aria-label="Return to main page">
-		<MiniPlanet />
-	</a>
-{/if}
 
 <style>
 	.site-header {
@@ -110,18 +103,6 @@
 		box-sizing: border-box;
 	}
 
-	.mini-planet-wrap {
-		position: fixed;
-		top: 88px;
-		right: clamp(0.8rem, 2vw, 1.4rem);
-		width: clamp(110px, 17vw, 210px);
-		height: clamp(110px, 17vw, 210px);
-		z-index: 5;
-		pointer-events: auto;
-		text-decoration: none;
-		cursor: pointer;
-	}
-
 	@media (max-width: 860px) {
 		.site-header {
 			align-items: flex-start;
@@ -135,10 +116,6 @@
 
 		.site-nav a {
 			padding: 0.45rem 0.55rem;
-		}
-
-		.mini-planet-wrap {
-			top: 118px;
 		}
 	}
 
