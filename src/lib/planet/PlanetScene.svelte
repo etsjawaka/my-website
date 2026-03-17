@@ -158,11 +158,8 @@
     pointerDownX = event.clientX;
     pointerDownY = event.clientY;
 
-    // On touch devices, treat press as hover to surface the child label.
-    if (event.pointerType === 'touch') {
-      const index = pickTarget(event);
-      hoveredIndex = index === -1 ? null : index;
-    }
+    const index = pickTarget(event);
+    hoveredIndex = index === -1 ? null : index;
 
     dom.style.cursor = 'grabbing';
   }
@@ -180,17 +177,17 @@
     dom.style.cursor = 'grab';
   }
 
-  function handlePointerUp() {
-    updateCursor();
-  }
-
-  function handleClick(event: MouseEvent) {
-    if (Math.hypot(event.clientX - pointerDownX, event.clientY - pointerDownY) > 10) return;
-
+  function handlePointerUp(event: PointerEvent) {
+    const moved = Math.hypot(event.clientX - pointerDownX, event.clientY - pointerDownY);
     const index = pickTarget(event);
-    if (index < 0 || !items[index]) return;
 
-    goto(items[index].href);
+    // Treat small pointer movement as an intentional click/tap on a child object.
+    if (moved <= 18 && index >= 0 && items[index]) {
+      goto(items[index].href);
+      return;
+    }
+
+    updateCursor();
   }
 
   function updateHotspots() {
@@ -262,7 +259,6 @@
     dom.addEventListener('pointermove', handlePointerMove);
     dom.addEventListener('pointerleave', handlePointerLeave);
     dom.addEventListener('pointerup', handlePointerUp);
-    dom.addEventListener('click', handleClick);
 
     return () => {
       mounted = false;
@@ -270,7 +266,6 @@
       dom.removeEventListener('pointermove', handlePointerMove);
       dom.removeEventListener('pointerleave', handlePointerLeave);
       dom.removeEventListener('pointerup', handlePointerUp);
-      dom.removeEventListener('click', handleClick);
       dom.style.cursor = 'auto';
       resetHotspots();
     };

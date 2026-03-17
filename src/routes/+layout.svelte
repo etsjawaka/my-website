@@ -30,9 +30,9 @@
 {@render children()}
 
 {#if page.url.pathname !== '/'}
-	<div class="mini-planet-wrap">
+	<a class="mini-planet-wrap" href="/" aria-label="Return to main page">
 		<MiniPlanet />
-	</div>
+	</a>
 {/if}
 
 <style>
@@ -117,7 +117,9 @@
 		width: clamp(110px, 17vw, 210px);
 		height: clamp(110px, 17vw, 210px);
 		z-index: 5;
-		pointer-events: none;
+		pointer-events: auto;
+		text-decoration: none;
+		cursor: pointer;
 	}
 
 	@media (max-width: 860px) {

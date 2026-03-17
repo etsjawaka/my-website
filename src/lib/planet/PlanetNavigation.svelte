@@ -10,9 +10,9 @@
   let status = '';
   let loadError = '';
 
-  $: hoveredLabel =
+  $: hoveredItem =
     hoveredIndex !== null && PLANET_NAV_ITEMS[hoveredIndex]
-      ? PLANET_NAV_ITEMS[hoveredIndex].label
+      ? PLANET_NAV_ITEMS[hoveredIndex]
       : null;
 </script>
 
@@ -44,9 +44,9 @@
       />
     </Canvas>
 
-    {#if hoveredLabel}
+    {#if hoveredItem}
       <div class="hover-label" style={`left:${hoverX}px;top:${hoverY - 24}px;`}>
-        {hoveredLabel}
+        {hoveredItem.label}
       </div>
     {/if}
   </div>
@@ -88,6 +88,8 @@
     pointer-events: none;
     backdrop-filter: blur(10px);
     line-height: 1;
+    white-space: nowrap;
+    box-shadow: 0 8px 18px rgba(44, 37, 25, 0.18);
   }
 
   @media (max-width: 680px) {
