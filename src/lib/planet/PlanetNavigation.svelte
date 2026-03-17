@@ -5,8 +5,13 @@
   import PlanetScene from '$lib/planet/PlanetScene.svelte';
   import { PLANET_NAV_ITEMS, type PlanetHotspot } from '$lib/planet/navigation';
 
+  const HOTSPOT_PICK_RADIUS = 92;
+
   let hoveredIndex: number | null = null;
   let hotspots: PlanetHotspot[] = [];
+  let canvasWrapEl: HTMLDivElement;
+  let pointerDownX = 0;
+  let pointerDownY = 0;
   let status = '';
   let loadError = '';
 
@@ -14,18 +19,54 @@
     hotspots = nextHotspots;
   }
 
-  function handleHotspotEnter(index: number) {
-    hoveredIndex = index;
-  }
-
-  function handleHotspotLeave(index: number) {
-    if (hoveredIndex === index) hoveredIndex = null;
-  }
-
   function openHotspot(index: number) {
     const item = PLANET_NAV_ITEMS[index];
     if (!item) return;
     goto(item.href);
+  }
+
+  function pickNearestHotspot(event: PointerEvent): PlanetHotspot | null {
+    if (!canvasWrapEl || !hotspots.length) return null;
+
+    const bounds = canvasWrapEl.getBoundingClientRect();
+    const x = event.clientX - bounds.left;
+    const y = event.clientY - bounds.top;
+
+    let nearest: PlanetHotspot | null = null;
+    let nearestDistance = Number.POSITIVE_INFINITY;
+
+    for (const hotspot of hotspots) {
+      if (!hotspot.visible) continue;
+      const distance = Math.hypot(x - hotspot.x, y - hotspot.y);
+      if (distance < nearestDistance) {
+        nearestDistance = distance;
+        nearest = hotspot;
+      }
+    }
+
+    return nearestDistance <= HOTSPOT_PICK_RADIUS ? nearest : null;
+  }
+
+  function handlePointerMove(event: PointerEvent) {
+    const hotspot = pickNearestHotspot(event);
+    hoveredIndex = hotspot ? hotspot.index : null;
+  }
+
+  function handlePointerDown(event: PointerEvent) {
+    pointerDownX = event.clientX;
+    pointerDownY = event.clientY;
+    const hotspot = pickNearestHotspot(event);
+    hoveredIndex = hotspot ? hotspot.index : null;
+  }
+
+  function handlePointerUp(event: PointerEvent) {
+    const moved = Math.hypot(event.clientX - pointerDownX, event.clientY - pointerDownY);
+    const hotspot = pickNearestHotspot(event);
+    if (hotspot && moved <= 16) openHotspot(hotspot.index);
+  }
+
+  function handlePointerLeave() {
+    hoveredIndex = null;
   }
 
   $: hoveredItem =
@@ -38,7 +79,15 @@
 </script>
 
 <section class="planet-shell">
-  <div class="canvas-wrap">
+  <!-- svelte-ignore a11y_no_static_element_interactions -->
+  <div
+    class="canvas-wrap"
+    bind:this={canvasWrapEl}
+    on:pointermove={handlePointerMove}
+    on:pointerdown={handlePointerDown}
+    on:pointerup={handlePointerUp}
+    on:pointerleave={handlePointerLeave}
+  >
     <Canvas dpr={1.5} shadows={false} colorManagementEnabled>
       <T.PerspectiveCamera makeDefault position={[0, 0.1, 4.4]} fov={30}>
         <OrbitControls
@@ -63,20 +112,6 @@
         onHotspotsChange={handleHotspotsChange}
       />
     </Canvas>
-
-    {#each hotspots as hotspot (hotspot.index)}
-      {#if hotspot.visible}
-        <button
-          class="hotspot-hit"
-          style={`left:${hotspot.x}px;top:${hotspot.y}px;`}
-          aria-label={`Open ${hotspot.label}`}
-          on:mouseenter={() => handleHotspotEnter(hotspot.index)}
-          on:mouseleave={() => handleHotspotLeave(hotspot.index)}
-          on:pointerdown={() => handleHotspotEnter(hotspot.index)}
-          on:click={() => openHotspot(hotspot.index)}
-        ></button>
-      {/if}
-    {/each}
 
     {#if hoveredItem && hoveredHotspot}
       <div class="hover-label" style={`left:${hoveredHotspot.x}px;top:${hoveredHotspot.y - 24}px;`}>
@@ -134,19 +169,6 @@
     box-shadow: 0 8px 18px rgba(44, 37, 25, 0.18);
   }
 
-  .hotspot-hit {
-    position: absolute;
-    width: 64px;
-    height: 64px;
-    transform: translate(-50%, -50%);
-    border: 0;
-    border-radius: 999px;
-    background: transparent;
-    cursor: pointer;
-    z-index: 1;
-    padding: 0;
-  }
-
   .hover-banner {
     position: absolute;
     left: 50%;
@@ -179,11 +201,6 @@
   }
 
   @media (max-width: 680px) {
-    .hotspot-hit {
-      width: 72px;
-      height: 72px;
-    }
-
     .hover-label {
       font-size: 0.8rem;
       padding: 0.42rem 0.62rem;
