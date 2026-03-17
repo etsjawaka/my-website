@@ -36,7 +36,6 @@
     let nearestDistance = Number.POSITIVE_INFINITY;
 
     for (const hotspot of hotspots) {
-      if (!hotspot.visible) continue;
       const distance = Math.hypot(x - hotspot.x, y - hotspot.y);
       if (distance < nearestDistance) {
         nearestDistance = distance;

@@ -150,20 +150,12 @@
       clickTargets.map((target, index) => {
         worldPosition.setFromMatrixPosition(target.matrixWorld).project(camera.current);
 
-        const visible =
-          worldPosition.z > -1 &&
-          worldPosition.z < 1 &&
-          worldPosition.x > -1.5 &&
-          worldPosition.x < 1.5 &&
-          worldPosition.y > -1.5 &&
-          worldPosition.y < 1.5;
-
         return {
           ...items[index],
           index,
           x: (worldPosition.x * 0.5 + 0.5) * bounds.width,
           y: (-worldPosition.y * 0.5 + 0.5) * bounds.height,
-          visible
+          visible: true
         };
       })
     );
