@@ -30,6 +30,16 @@
     opacity: 1
   });
 
+  function findDirectChildUnderRoot(object: Object3D, root: Object3D) {
+    let current: Object3D | null = object;
+
+    while (current?.parent && current.parent !== root) {
+      current = current.parent;
+    }
+
+    return current?.parent === root ? current : null;
+  }
+
   function styleParentMesh(target: Object3D) {
     target.traverse((object) => {
       if (!(object instanceof Mesh)) return;
@@ -79,12 +89,27 @@
 
   function syncTargets(model: ThrelteGltf) {
     planetRoot = model.scene.getObjectByName('PlanetRoot') ?? model.scene.children[0] ?? model.scene;
-    const namedTargets = ['Sphere', 'Sphere.001', 'Sphere.002', 'Sphere.003', 'Sphere.004']
+
+    const preferredNames = ['Sphere', 'Sphere.001', 'Sphere.002', 'Sphere.003', 'Sphere.004'];
+    const namedTargets = preferredNames
       .map((name) => planetRoot?.getObjectByName(name))
       .filter((obj): obj is Object3D => Boolean(obj));
 
-    clickTargets =
-      namedTargets.length === items.length ? namedTargets : planetRoot.children.slice(0, items.length);
+    const discovered = new Set<Object3D>();
+    planetRoot.traverse((object) => {
+      if (!(object instanceof Mesh)) return;
+      const directChild = findDirectChildUnderRoot(object, planetRoot as Object3D);
+      if (directChild && directChild !== planetRoot) discovered.add(directChild);
+    });
+
+    const discoveredTargets = Array.from(discovered);
+    const fallbackTargets = planetRoot.children.filter((child) => !namedTargets.includes(child));
+
+    const orderedTargets = [...namedTargets, ...discoveredTargets, ...fallbackTargets]
+      .filter((target, index, array) => array.indexOf(target) === index)
+      .slice(0, items.length);
+
+    clickTargets = orderedTargets;
 
     styleParentMesh(planetRoot);
     styleChildTargets();
