@@ -86,7 +86,12 @@
 
   function syncTargets(model: ThrelteGltf) {
     planetRoot = model.scene.getObjectByName('PlanetRoot') ?? model.scene.children[0] ?? model.scene;
-    clickTargets = planetRoot.children.slice(0, items.length);
+    const namedTargets = ['Sphere', 'Sphere.001', 'Sphere.002', 'Sphere.003', 'Sphere.004']
+      .map((name) => planetRoot?.getObjectByName(name))
+      .filter((obj): obj is Object3D => Boolean(obj));
+
+    clickTargets =
+      namedTargets.length === items.length ? namedTargets : planetRoot.children.slice(0, items.length);
 
     styleParentMesh(planetRoot);
     styleChildTargets();
@@ -172,7 +177,7 @@
       }
     });
 
-    return nearestDistance <= 64 ? nearestIndex : -1;
+    return nearestDistance <= 150 ? nearestIndex : -1;
   }
 
   function updateCursor() {
