@@ -50,13 +50,13 @@
       </div>
     {/if}
 
-    <div class="hover-banner" class:active={Boolean(hoveredItem)}>
-      {#if hoveredItem}
+    {#if hoveredItem}
+      <a class="hover-banner active hover-banner-link" href={hoveredItem.href}>
         {hoveredItem.label}
-      {:else}
-        Hover a child object
-      {/if}
-    </div>
+      </a>
+    {:else}
+      <div class="hover-banner">Hover a child object</div>
+    {/if}
   </div>
 </section>
 
@@ -123,6 +123,12 @@
     border-color: rgba(117, 98, 68, 0.62);
     background: rgba(248, 246, 241, 0.96);
     color: #5d4f3b;
+  }
+
+  .hover-banner-link {
+    pointer-events: auto;
+    text-decoration: none;
+    cursor: pointer;
   }
 
   @media (max-width: 680px) {

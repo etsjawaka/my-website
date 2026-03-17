@@ -145,9 +145,34 @@
     raycaster.setFromCamera(pointer, camera.current);
 
     const intersections = raycaster.intersectObjects(clickTargets, true);
-    if (!intersections.length) return -1;
+    if (intersections.length) {
+      return findTargetIndex(intersections[0].object);
+    }
 
-    return findTargetIndex(intersections[0].object);
+    // Fallback: pick nearest projected child center to make hover/click more forgiving.
+    const bounds = dom.getBoundingClientRect();
+    const px = event.clientX - bounds.left;
+    const py = event.clientY - bounds.top;
+
+    let nearestIndex = -1;
+    let nearestDistance = Number.POSITIVE_INFINITY;
+
+    clickTargets.forEach((target, index) => {
+      worldPosition.setFromMatrixPosition(target.matrixWorld).project(camera.current);
+
+      if (worldPosition.z <= -1 || worldPosition.z >= 1) return;
+
+      const tx = (worldPosition.x * 0.5 + 0.5) * bounds.width;
+      const ty = (-worldPosition.y * 0.5 + 0.5) * bounds.height;
+      const distance = Math.hypot(px - tx, py - ty);
+
+      if (distance < nearestDistance) {
+        nearestDistance = distance;
+        nearestIndex = index;
+      }
+    });
+
+    return nearestDistance <= 64 ? nearestIndex : -1;
   }
 
   function updateCursor() {
