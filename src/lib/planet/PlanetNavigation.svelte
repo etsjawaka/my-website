@@ -2,22 +2,17 @@
   import { Canvas, T } from '@threlte/core';
   import { OrbitControls } from '@threlte/extras';
   import PlanetScene from '$lib/planet/PlanetScene.svelte';
-  import { PLANET_NAV_ITEMS, type PlanetHotspot } from '$lib/planet/navigation';
+  import { PLANET_NAV_ITEMS } from '$lib/planet/navigation';
 
-  let hotspots: PlanetHotspot[] = [];
   let hoveredIndex: number | null = null;
   let hoverX = 0;
   let hoverY = 0;
   let status = '';
   let loadError = '';
 
-  function handleHotspotsChange(nextHotspots: PlanetHotspot[]) {
-    hotspots = nextHotspots;
-  }
-
-  $: hoveredHotspot =
-    hoveredIndex !== null && hotspots[hoveredIndex]
-      ? hotspots[hoveredIndex]
+  $: hoveredLabel =
+    hoveredIndex !== null && PLANET_NAV_ITEMS[hoveredIndex]
+      ? PLANET_NAV_ITEMS[hoveredIndex].label
       : null;
 </script>
 
@@ -46,18 +41,13 @@
         bind:hoverY
         bind:status
         bind:loadError
-        onHotspotsChange={handleHotspotsChange}
       />
     </Canvas>
 
-    {#if hoveredHotspot}
-      <a
-        class="hover-label"
-        style={`left:${hoveredHotspot.x || hoverX}px;top:${(hoveredHotspot.y || hoverY) - 24}px;`}
-        href={hoveredHotspot.href}
-      >
-        {hoveredHotspot.label}
-      </a>
+    {#if hoveredLabel}
+      <div class="hover-label" style={`left:${hoverX}px;top:${hoverY - 24}px;`}>
+        {hoveredLabel}
+      </div>
     {/if}
   </div>
 </section>
@@ -95,15 +85,9 @@
     padding: 0.5rem 0.75rem;
     font-size: 0.88rem;
     font-weight: 700;
-    pointer-events: auto;
+    pointer-events: none;
     backdrop-filter: blur(10px);
-    text-decoration: none;
     line-height: 1;
-    cursor: pointer;
-  }
-
-  .hover-label:hover {
-    background: rgba(255, 255, 255, 0.98);
   }
 
   @media (max-width: 680px) {
