@@ -13,11 +13,6 @@ export type PlanetHotspot = PlanetNavItem & {
 
 export const PLANET_NAV_ITEMS: PlanetNavItem[] = [
   {
-    label: 'Mainpage',
-    href: '/',
-    description: 'Planet home and overview.'
-  },
-  {
     label: 'About',
     href: '/about',
     description: 'Image reel, studio text and blog box.'
@@ -36,5 +31,10 @@ export const PLANET_NAV_ITEMS: PlanetNavItem[] = [
     label: 'Blog',
     href: '/blog',
     description: 'Writing, notes and latest updates.'
+  },
+  {
+    label: 'Products',
+    href: '/products',
+    description: 'Products and shop links.'
   }
 ];
