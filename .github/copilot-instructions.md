@@ -20,8 +20,8 @@ This file gives concise, repo-specific guidance for AI coding agents working on 
 
 - Routing and pages
 
-- File-based routing under `src/routes/`. Examples: [src/routes/+page.svelte](src/routes/+page.svelte) and [src/routes/products/+page.svelte](src/routes/products/+page.svelte).
-- Layout: application-level wrapper in [src/routes/+layout.svelte](src/routes/+layout.svelte) imports assets via the `$lib` alias (example: `$lib/assets/favicon.svg`) and uses the render children pattern in this repo (`let { children } = $props();` and `{@render children()}`). Keep changes compatible with that pattern.
+- File-based routing under `src/routes/`. Examples: [src/routes/+page.svelte](../src/routes/+page.svelte) and [src/routes/products/+page.svelte](../src/routes/products/+page.svelte).
+- Layout: application-level wrapper in [src/routes/+layout.svelte](../src/routes/+layout.svelte) imports assets via the `$lib` alias (example: `$lib/assets/favicon.svg`) and uses the render children pattern in this repo (`let { children } = $props();` and `{@render children()}`). Keep changes compatible with that pattern.
 
 - Assets and static files
 
@@ -44,10 +44,10 @@ This file gives concise, repo-specific guidance for AI coding agents working on 
 
 - Important files to reference
 
-- `package.json` — scripts and devDependencies (dev commands: `dev`, `build`, `preview`, `check`, `lint`, `format`). See [package.json](package.json).
-- `svelte.config.js` — adapter and kit configuration. See [svelte.config.js](svelte.config.js).
-- `vite.config.ts` — Vite + Svelte plugin. See [vite.config.ts](vite.config.ts).
-- `tsconfig.json` — extends `.svelte-kit/tsconfig.json`. See [tsconfig.json](tsconfig.json).
+- `package.json` — scripts and devDependencies (dev commands: `dev`, `build`, `preview`, `check`, `lint`, `format`). See [package.json](../package.json).
+- `svelte.config.js` — adapter and kit configuration. See [svelte.config.js](../svelte.config.js).
+- `vite.config.ts` — Vite + Svelte plugin. See [vite.config.ts](../vite.config.ts).
+- `tsconfig.json` — extends `.svelte-kit/tsconfig.json`. See [tsconfig.json](../tsconfig.json).
 
 - When to ask the user
 
