@@ -5,8 +5,6 @@
   import PlanetScene from '$lib/planet/PlanetScene.svelte';
   import { PLANET_NAV_ITEMS, type PlanetHotspot } from '$lib/planet/navigation';
 
-  const HOTSPOT_PICK_RADIUS = 92;
-
   let hoveredIndex: number | null = null;
   let hotspots: PlanetHotspot[] = [];
   let canvasWrapEl: HTMLDivElement;
@@ -25,43 +23,14 @@
     goto(item.href);
   }
 
-  function pickNearestHotspot(event: PointerEvent): PlanetHotspot | null {
-    if (!canvasWrapEl || !hotspots.length) return null;
-
-    const bounds = canvasWrapEl.getBoundingClientRect();
-    const x = event.clientX - bounds.left;
-    const y = event.clientY - bounds.top;
-
-    let nearest: PlanetHotspot | null = null;
-    let nearestDistance = Number.POSITIVE_INFINITY;
-
-    for (const hotspot of hotspots) {
-      const distance = Math.hypot(x - hotspot.x, y - hotspot.y);
-      if (distance < nearestDistance) {
-        nearestDistance = distance;
-        nearest = hotspot;
-      }
-    }
-
-    return nearestDistance <= HOTSPOT_PICK_RADIUS ? nearest : null;
-  }
-
-  function handlePointerMove(event: PointerEvent) {
-    const hotspot = pickNearestHotspot(event);
-    hoveredIndex = hotspot ? hotspot.index : null;
-  }
-
   function handlePointerDown(event: PointerEvent) {
     pointerDownX = event.clientX;
     pointerDownY = event.clientY;
-    const hotspot = pickNearestHotspot(event);
-    hoveredIndex = hotspot ? hotspot.index : null;
   }
 
   function handlePointerUp(event: PointerEvent) {
     const moved = Math.hypot(event.clientX - pointerDownX, event.clientY - pointerDownY);
-    const hotspot = pickNearestHotspot(event);
-    if (hotspot && moved <= 16) openHotspot(hotspot.index);
+    if (hoveredIndex !== null && moved <= 16) openHotspot(hoveredIndex);
   }
 
   function handlePointerLeave() {
@@ -82,7 +51,6 @@
   <div
     class="canvas-wrap"
     bind:this={canvasWrapEl}
-    on:pointermove={handlePointerMove}
     on:pointerdown={handlePointerDown}
     on:pointerup={handlePointerUp}
     on:pointerleave={handlePointerLeave}
@@ -121,18 +89,6 @@
         {hoveredItem.label}
       </a>
     {/if}
-
-    <!-- DEBUG: remove after fixing -->
-    <div class="debug-overlay">
-      <p>hotspots: {hotspots.length} | hovered: {hoveredIndex ?? 'none'}</p>
-      {#each hotspots as hs}
-        <div
-          class="debug-dot"
-          style={`left:${hs.x}px;top:${hs.y}px;background:${hoveredIndex === hs.index ? 'red' : 'blue'};`}
-          title={hs.label}
-        ></div>
-      {/each}
-    </div>
   </div>
 </section>
 
@@ -176,31 +132,6 @@
     box-shadow: 0 8px 18px rgba(44, 37, 25, 0.18);
     text-decoration: none;
     cursor: pointer;
-  }
-
-  .debug-overlay {
-    position: absolute;
-    bottom: 8px;
-    left: 8px;
-    z-index: 10;
-    pointer-events: none;
-  }
-  .debug-overlay p {
-    background: rgba(0,0,0,0.7);
-    color: #fff;
-    font-size: 12px;
-    padding: 2px 6px;
-    margin: 0;
-    border-radius: 4px;
-  }
-  .debug-dot {
-    position: absolute;
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-    transform: translate(-50%, -50%);
-    pointer-events: none;
-    opacity: 0.8;
   }
 
   @media (max-width: 680px) {

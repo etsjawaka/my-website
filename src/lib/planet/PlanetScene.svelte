@@ -2,7 +2,15 @@
   import { onMount } from 'svelte';
   import { T, useTask, useThrelte } from '@threlte/core';
   import { useGltf, type ThrelteGltf } from '@threlte/extras';
-  import { Mesh, MeshBasicMaterial, MeshStandardMaterial, Object3D, Vector3 } from 'three';
+  import {
+    Mesh,
+    MeshBasicMaterial,
+    MeshStandardMaterial,
+    Object3D,
+    Raycaster,
+    Vector2,
+    Vector3
+  } from 'three';
   import type { PlanetHotspot, PlanetNavItem } from '$lib/planet/navigation';
 
   export let items: PlanetNavItem[] = [];
@@ -19,6 +27,8 @@
   const loader = useGltf();
   const { camera, dom, invalidate } = useThrelte();
   const worldPosition = new Vector3();
+  const pointerNdc = new Vector2();
+  const raycaster = new Raycaster();
   const desiredScale = new Vector3();
   const baseScales = new Map<Object3D, Vector3>();
   const childMaterials = new Map<Object3D, MeshStandardMaterial[]>();
@@ -111,12 +121,6 @@
 
     clickTargets = orderedTargets;
 
-    // DEBUG: log model structure
-    console.log('[Planet] planetRoot:', planetRoot?.name, '| children:', planetRoot?.children.map(c => c.name + '(' + c.type + ')'));
-    console.log('[Planet] namedTargets:', namedTargets.map(t => t.name));
-    console.log('[Planet] discoveredTargets:', discoveredTargets.map(t => t.name));
-    console.log('[Planet] clickTargets final:', clickTargets.map(t => t.name), 'count:', clickTargets.length);
-
     styleParentMesh(planetRoot);
     styleChildTargets();
 
@@ -167,6 +171,36 @@
     );
   }
 
+  function pickHoveredIndex(event: PointerEvent): number | null {
+    if (!planetRoot || !clickTargets.length) return null;
+
+    const bounds = dom.getBoundingClientRect();
+    if (!bounds.width || !bounds.height) return null;
+
+    pointerNdc.set(
+      ((event.clientX - bounds.left) / bounds.width) * 2 - 1,
+      -((event.clientY - bounds.top) / bounds.height) * 2 + 1
+    );
+
+    raycaster.setFromCamera(pointerNdc, camera.current);
+    const intersections = raycaster.intersectObjects(clickTargets, true);
+    if (!intersections.length) return null;
+
+    const directChild = findDirectChildUnderRoot(intersections[0].object, planetRoot);
+    if (!directChild) return null;
+
+    const index = clickTargets.indexOf(directChild);
+    return index >= 0 ? index : null;
+  }
+
+  function handlePointerMove(event: PointerEvent) {
+    hoveredIndex = pickHoveredIndex(event);
+  }
+
+  function handlePointerLeave() {
+    hoveredIndex = null;
+  }
+
   useTask(
     (delta: number) => {
       if (!planetRoot) return;
@@ -203,8 +237,13 @@
     resetHotspots();
     loadModel();
 
+    dom.addEventListener('pointermove', handlePointerMove);
+    dom.addEventListener('pointerleave', handlePointerLeave);
+
     return () => {
       mounted = false;
+      dom.removeEventListener('pointermove', handlePointerMove);
+      dom.removeEventListener('pointerleave', handlePointerLeave);
       resetHotspots();
     };
   });
