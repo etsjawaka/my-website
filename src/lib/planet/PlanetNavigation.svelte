@@ -71,7 +71,7 @@
 
 		{#if hoveredItem}
 			<span class="hover-label">
-				{hoveredItem.label}
+				{hoveredItem.label.toLowerCase()}
 			</span>
 		{/if}
 	</div>
