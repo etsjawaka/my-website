@@ -59,8 +59,8 @@
 	$: isMobile = innerWidth <= 680;
 	$: cameraDistance = isMobile ? 5.25 : 4.4;
 	$: cameraFov = isMobile ? 36 : 30;
-	$: minPolarAngle = isMobile ? 1.02 : 0.95;
-	$: maxPolarAngle = isMobile ? 2.05 : 2.15;
+	$: minPolarAngle = isMobile ? 1.45 : 0.95;
+	$: maxPolarAngle = isMobile ? 1.45 : 2.15;
 
 	$: if (hoveredIndex !== null) {
 		if (clearLabelTimeout) {
@@ -103,6 +103,7 @@
 			<T.PerspectiveCamera makeDefault position={[0, 0.1, cameraDistance]} fov={cameraFov}>
 				<OrbitControls
 					enablePan={false}
+					enableRotate={!isMobile}
 					enableZoom={false}
 					minDistance={cameraDistance}
 					maxDistance={cameraDistance}
