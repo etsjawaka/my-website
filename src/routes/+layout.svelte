@@ -1,6 +1,5 @@
 <script lang="ts">
 	import favicon from '$lib/assets/favicon.svg';
-	import { page } from '$app/state';
 
 	let { children } = $props();
 </script>
@@ -13,7 +12,6 @@
 {@render children()}
 
 <style>
-
 	:global(:root) {
 		--bg-color: #e8e8e5;
 		--text-color: #8a795d;
@@ -31,5 +29,4 @@
 	:global(*) {
 		box-sizing: border-box;
 	}
-
 </style>

@@ -54,4 +54,4 @@ This file gives concise, repo-specific guidance for AI coding agents working on 
 - Ask before changing build/runtime adapter (adapter-auto) or the TypeScript generated config.
 - Ask before adding server-side routes or API endpoints — this repo currently contains only client route examples.
 
-If anything is missing or you'd like the guide to emphasize other parts of the codebase, tell me which areas to expand. 
+If anything is missing or you'd like the guide to emphasize other parts of the codebase, tell me which areas to expand.
