@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { resolve } from '$app/paths';
-	import { goto } from '$app/navigation';
 	import { Canvas, T } from '@threlte/core';
 	import { OrbitControls } from '@threlte/extras';
 	import PlanetScene from '$lib/planet/PlanetScene.svelte';
@@ -21,7 +20,7 @@
 	function openHotspot(index: number) {
 		const item = PLANET_NAV_ITEMS[index];
 		if (!item) return;
-		goto(resolve(item.href));
+		window.location.assign(resolve(item.href));
 	}
 
 	function handlePointerDown(event: PointerEvent) {
@@ -83,6 +82,7 @@
 			<a
 				class="hover-label"
 				href={resolve(hoveredItem.href)}
+				data-sveltekit-reload
 				style={`left:${hoveredHotspot.x}px;top:${hoveredHotspot.y - 24}px;`}
 			>
 				{hoveredItem.label}
