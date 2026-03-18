@@ -5,6 +5,7 @@
 	import { T, useTask, useThrelte } from '@threlte/core';
 	import { useGltf, type ThrelteGltf } from '@threlte/extras';
 	import {
+		Box3,
 		Mesh,
 		MeshBasicMaterial,
 		MeshStandardMaterial,
@@ -16,6 +17,7 @@
 	import type { PlanetHotspot, PlanetNavItem } from '$lib/planet/navigation';
 
 	export let items: PlanetNavItem[] = [];
+	export let isMobile = false;
 	export let hoveredIndex: number | null = null;
 	export let status = 'Loading planet model...';
 	export let loadError = '';
@@ -29,6 +31,8 @@
 	const loader = useGltf();
 	const { camera, dom, invalidate } = useThrelte();
 	const worldPosition = new Vector3();
+	const modelCenter = new Vector3();
+	const modelBounds = new Box3();
 	const pointerNdc = new Vector2();
 	const raycaster = new Raycaster();
 	const desiredScale = new Vector3();
@@ -102,6 +106,11 @@
 	function syncTargets(model: ThrelteGltf) {
 		planetRoot =
 			model.scene.getObjectByName('PlanetRoot') ?? model.scene.children[0] ?? model.scene;
+
+		// Keep the root centered so rotations do not drift the model vertically on small screens.
+		modelBounds.setFromObject(planetRoot);
+		modelBounds.getCenter(modelCenter);
+		planetRoot.position.sub(modelCenter);
 
 		const preferredNames = ['Sphere', 'Sphere.001', 'Sphere.002', 'Sphere.003', 'Sphere.004'];
 		const namedTargets = preferredNames
@@ -214,7 +223,11 @@
 			if (!planetRoot) return;
 
 			planetRoot.rotation.y += delta * 0.1;
-			planetRoot.rotation.z += delta * 0.022;
+			if (isMobile) {
+				planetRoot.rotation.z += (0 - planetRoot.rotation.z) * 0.14;
+			} else {
+				planetRoot.rotation.z += delta * 0.022;
+			}
 
 			clickTargets.forEach((target, index) => {
 				const baseScale = baseScales.get(target);

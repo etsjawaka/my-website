@@ -118,6 +118,7 @@
 
 			<PlanetScene
 				items={PLANET_NAV_ITEMS}
+				isMobile={isMobile}
 				bind:hoveredIndex
 				bind:status
 				bind:loadError
@@ -134,7 +135,9 @@
 
 <style>
 	.planet-shell {
-		height: 100vh;
+		height: 100dvh;
+		min-height: 100vh;
+		overflow: hidden;
 	}
 
 	.canvas-wrap {
