@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { resolve } from '$app/paths';
-	import { page } from '$app/state';
+	import { page } from '$app/stores';
 	import favicon from '$lib/assets/favicon.svg';
 
 	let { children } = $props();
@@ -11,7 +11,7 @@
 	<link rel="icon" href={favicon} />
 </svelte:head>
 
-{#if page.url.pathname === '/'}
+{#if $page.url.pathname === '/'}
 	{@render children()}
 {:else}
 	<main class="subpage-shell" aria-label="Subpage">
