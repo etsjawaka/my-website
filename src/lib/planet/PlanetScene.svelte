@@ -111,6 +111,12 @@
 
     clickTargets = orderedTargets;
 
+    // DEBUG: log model structure
+    console.log('[Planet] planetRoot:', planetRoot?.name, '| children:', planetRoot?.children.map(c => c.name + '(' + c.type + ')'));
+    console.log('[Planet] namedTargets:', namedTargets.map(t => t.name));
+    console.log('[Planet] discoveredTargets:', discoveredTargets.map(t => t.name));
+    console.log('[Planet] clickTargets final:', clickTargets.map(t => t.name), 'count:', clickTargets.length);
+
     styleParentMesh(planetRoot);
     styleChildTargets();
 

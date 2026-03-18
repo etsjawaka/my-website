@@ -121,6 +121,18 @@
         {hoveredItem.label}
       </a>
     {/if}
+
+    <!-- DEBUG: remove after fixing -->
+    <div class="debug-overlay">
+      <p>hotspots: {hotspots.length} | hovered: {hoveredIndex ?? 'none'}</p>
+      {#each hotspots as hs}
+        <div
+          class="debug-dot"
+          style={`left:${hs.x}px;top:${hs.y}px;background:${hoveredIndex === hs.index ? 'red' : 'blue'};`}
+          title={hs.label}
+        ></div>
+      {/each}
+    </div>
   </div>
 </section>
 
@@ -164,6 +176,31 @@
     box-shadow: 0 8px 18px rgba(44, 37, 25, 0.18);
     text-decoration: none;
     cursor: pointer;
+  }
+
+  .debug-overlay {
+    position: absolute;
+    bottom: 8px;
+    left: 8px;
+    z-index: 10;
+    pointer-events: none;
+  }
+  .debug-overlay p {
+    background: rgba(0,0,0,0.7);
+    color: #fff;
+    font-size: 12px;
+    padding: 2px 6px;
+    margin: 0;
+    border-radius: 4px;
+  }
+  .debug-dot {
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    opacity: 0.8;
   }
 
   @media (max-width: 680px) {
