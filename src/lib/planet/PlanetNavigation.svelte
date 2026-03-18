@@ -8,6 +8,7 @@
 	let hoveredIndex: number | null = null;
 	let activeLabelIndex: number | null = null;
 	let mobileArmedIndex: number | null = null;
+	let tappedIndex: number | null = null;
 	let canvasWrapEl: HTMLDivElement;
 	let pointerDownX = 0;
 	let pointerDownY = 0;
@@ -25,26 +26,38 @@
 	function handlePointerDown(event: PointerEvent) {
 		pointerDownX = event.clientX;
 		pointerDownY = event.clientY;
+		// PlanetScene's canvas listener fires before this (on bubble), so hoveredIndex is already set.
+		tappedIndex = hoveredIndex;
 	}
 
 	function handlePointerUp(event: PointerEvent) {
 		const moved = Math.hypot(event.clientX - pointerDownX, event.clientY - pointerDownY);
-		if (hoveredIndex === null || moved > 16) return;
+		if (moved > 16) return;
 
 		if (!isMobile) {
-			openHotspot(hoveredIndex);
+			if (hoveredIndex !== null) openHotspot(hoveredIndex);
 			return;
 		}
 
-		if (mobileArmedIndex === hoveredIndex) {
+		// Mobile: use tappedIndex (captured at pointerdown) because
+		// pointerleave clears hoveredIndex before pointerup fires on touch.
+		if (tappedIndex === null) {
+			// Tapped empty space — dismiss any armed label
 			mobileArmedIndex = null;
-			openHotspot(hoveredIndex);
+			activeLabelIndex = null;
 			return;
 		}
 
-		mobileArmedIndex = hoveredIndex;
-		activeLabelIndex = hoveredIndex;
+		if (mobileArmedIndex === tappedIndex) {
+			// Second tap on same child: navigate
+			mobileArmedIndex = null;
+			openHotspot(tappedIndex);
+			return;
+		}
 
+		// First tap on a child: show label
+		mobileArmedIndex = tappedIndex;
+		activeLabelIndex = tappedIndex;
 		if (clearLabelTimeout) {
 			clearTimeout(clearLabelTimeout);
 			clearLabelTimeout = null;
