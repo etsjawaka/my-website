@@ -6,9 +6,12 @@
 	import { PLANET_NAV_ITEMS } from '$lib/planet/navigation';
 
 	let hoveredIndex: number | null = null;
+	let activeLabelIndex: number | null = null;
 	let canvasWrapEl: HTMLDivElement;
 	let pointerDownX = 0;
 	let pointerDownY = 0;
+	let innerWidth = 1200;
+	let clearLabelTimeout: ReturnType<typeof setTimeout> | null = null;
 	let status = '';
 	let loadError = '';
 
@@ -32,9 +35,34 @@
 		hoveredIndex = null;
 	}
 
+	$: isMobile = innerWidth <= 680;
+	$: cameraDistance = isMobile ? 5.25 : 4.4;
+	$: cameraFov = isMobile ? 36 : 30;
+	$: minPolarAngle = isMobile ? 1.02 : 0.95;
+	$: maxPolarAngle = isMobile ? 2.05 : 2.15;
+
+	$: if (hoveredIndex !== null) {
+		if (clearLabelTimeout) {
+			clearTimeout(clearLabelTimeout);
+			clearLabelTimeout = null;
+		}
+		activeLabelIndex = hoveredIndex;
+	}
+
+	$: if (hoveredIndex === null && activeLabelIndex !== null && !clearLabelTimeout) {
+		clearLabelTimeout = setTimeout(() => {
+			activeLabelIndex = null;
+			clearLabelTimeout = null;
+		}, 220);
+	}
+
 	$: hoveredItem =
-		hoveredIndex !== null && PLANET_NAV_ITEMS[hoveredIndex] ? PLANET_NAV_ITEMS[hoveredIndex] : null;
+		activeLabelIndex !== null && PLANET_NAV_ITEMS[activeLabelIndex]
+			? PLANET_NAV_ITEMS[activeLabelIndex]
+			: null;
 </script>
+
+<svelte:window bind:innerWidth />
 
 <section class="planet-shell">
 	<!-- svelte-ignore a11y_no_static_element_interactions -->
@@ -45,15 +73,15 @@
 		on:pointerup={handlePointerUp}
 		on:pointerleave={handlePointerLeave}
 	>
-		<Canvas dpr={1.5} shadows={false} colorManagementEnabled>
-			<T.PerspectiveCamera makeDefault position={[0, 0.1, 4.4]} fov={30}>
+		<Canvas dpr={isMobile ? 1.2 : 1.5} shadows={false} colorManagementEnabled>
+			<T.PerspectiveCamera makeDefault position={[0, 0.1, cameraDistance]} fov={cameraFov}>
 				<OrbitControls
 					enablePan={false}
 					enableZoom={false}
-					minDistance={4.4}
-					maxDistance={4.4}
-					minPolarAngle={0.95}
-					maxPolarAngle={2.15}
+					minDistance={cameraDistance}
+					maxDistance={cameraDistance}
+					minPolarAngle={minPolarAngle}
+					maxPolarAngle={maxPolarAngle}
 				/>
 			</T.PerspectiveCamera>
 
