@@ -7,6 +7,7 @@
 
 	let hoveredIndex: number | null = null;
 	let activeLabelIndex: number | null = null;
+	let mobileArmedIndex: number | null = null;
 	let canvasWrapEl: HTMLDivElement;
 	let pointerDownX = 0;
 	let pointerDownY = 0;
@@ -28,11 +29,31 @@
 
 	function handlePointerUp(event: PointerEvent) {
 		const moved = Math.hypot(event.clientX - pointerDownX, event.clientY - pointerDownY);
-		if (hoveredIndex !== null && moved <= 16) openHotspot(hoveredIndex);
+		if (hoveredIndex === null || moved > 16) return;
+
+		if (!isMobile) {
+			openHotspot(hoveredIndex);
+			return;
+		}
+
+		if (mobileArmedIndex === hoveredIndex) {
+			mobileArmedIndex = null;
+			openHotspot(hoveredIndex);
+			return;
+		}
+
+		mobileArmedIndex = hoveredIndex;
+		activeLabelIndex = hoveredIndex;
+
+		if (clearLabelTimeout) {
+			clearTimeout(clearLabelTimeout);
+			clearLabelTimeout = null;
+		}
 	}
 
 	function handlePointerLeave() {
 		hoveredIndex = null;
+		if (!isMobile) mobileArmedIndex = null;
 	}
 
 	$: isMobile = innerWidth <= 680;
@@ -49,7 +70,12 @@
 		activeLabelIndex = hoveredIndex;
 	}
 
-	$: if (hoveredIndex === null && activeLabelIndex !== null && !clearLabelTimeout) {
+	$: if (
+		hoveredIndex === null &&
+		activeLabelIndex !== null &&
+		!clearLabelTimeout &&
+		mobileArmedIndex === null
+	) {
 		clearLabelTimeout = setTimeout(() => {
 			activeLabelIndex = null;
 			clearLabelTimeout = null;

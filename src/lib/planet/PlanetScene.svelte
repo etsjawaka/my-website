@@ -201,6 +201,10 @@
 		hoveredIndex = pickHoveredIndex(event);
 	}
 
+	function handlePointerDown(event: PointerEvent) {
+		hoveredIndex = pickHoveredIndex(event);
+	}
+
 	function handlePointerLeave() {
 		hoveredIndex = null;
 	}
@@ -241,11 +245,13 @@
 		resetHotspots();
 		loadModel();
 
+		dom.addEventListener('pointerdown', handlePointerDown);
 		dom.addEventListener('pointermove', handlePointerMove);
 		dom.addEventListener('pointerleave', handlePointerLeave);
 
 		return () => {
 			mounted = false;
+			dom.removeEventListener('pointerdown', handlePointerDown);
 			dom.removeEventListener('pointermove', handlePointerMove);
 			dom.removeEventListener('pointerleave', handlePointerLeave);
 			resetHotspots();
