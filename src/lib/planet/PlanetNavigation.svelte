@@ -3,19 +3,14 @@
 	import { Canvas, T } from '@threlte/core';
 	import { OrbitControls } from '@threlte/extras';
 	import PlanetScene from '$lib/planet/PlanetScene.svelte';
-	import { PLANET_NAV_ITEMS, type PlanetHotspot } from '$lib/planet/navigation';
+	import { PLANET_NAV_ITEMS } from '$lib/planet/navigation';
 
 	let hoveredIndex: number | null = null;
-	let hotspots: PlanetHotspot[] = [];
 	let canvasWrapEl: HTMLDivElement;
 	let pointerDownX = 0;
 	let pointerDownY = 0;
 	let status = '';
 	let loadError = '';
-
-	function handleHotspotsChange(nextHotspots: PlanetHotspot[]) {
-		hotspots = nextHotspots;
-	}
 
 	function openHotspot(index: number) {
 		const item = PLANET_NAV_ITEMS[index];
@@ -39,9 +34,6 @@
 
 	$: hoveredItem =
 		hoveredIndex !== null && PLANET_NAV_ITEMS[hoveredIndex] ? PLANET_NAV_ITEMS[hoveredIndex] : null;
-
-	$: hoveredHotspot =
-		hoveredIndex !== null && hotspots[hoveredIndex] ? hotspots[hoveredIndex] : null;
 </script>
 
 <section class="planet-shell">
@@ -74,19 +66,13 @@
 				bind:hoveredIndex
 				bind:status
 				bind:loadError
-				onHotspotsChange={handleHotspotsChange}
 			/>
 		</Canvas>
 
-		{#if hoveredItem && hoveredHotspot}
-			<a
-				class="hover-label"
-				href={resolve(hoveredItem.href)}
-				data-sveltekit-reload
-				style={`left:${hoveredHotspot.x}px;top:${hoveredHotspot.y - 24}px;`}
-			>
+		{#if hoveredItem}
+			<span class="hover-label">
 				{hoveredItem.label}
-			</a>
+			</span>
 		{/if}
 	</div>
 </section>
@@ -115,8 +101,11 @@
 
 	.hover-label {
 		position: absolute;
+		bottom: 52px;
+		left: 50%;
+		transform: translateX(-50%);
 		z-index: 3;
-		transform: translate(-50%, -50%);
+		pointer-events: none;
 		border: 1px solid rgba(117, 98, 68, 0.55);
 		border-radius: 999px;
 		background: rgba(248, 246, 241, 0.97);
@@ -124,19 +113,17 @@
 		padding: 0.5rem 0.75rem;
 		font-size: 0.88rem;
 		font-weight: 700;
-		pointer-events: auto;
 		backdrop-filter: blur(10px);
 		line-height: 1;
 		white-space: nowrap;
 		box-shadow: 0 8px 18px rgba(44, 37, 25, 0.18);
-		text-decoration: none;
-		cursor: pointer;
 	}
 
 	@media (max-width: 680px) {
 		.hover-label {
 			font-size: 0.8rem;
 			padding: 0.42rem 0.62rem;
+			bottom: 40px;
 		}
 	}
 </style>
