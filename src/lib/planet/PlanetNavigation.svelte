@@ -52,6 +52,29 @@
 		}
 	}
 
+	function handleHoverChange(index: number | null) {
+		hoveredIndex = index;
+
+		if (isMobile) return;
+
+		if (clearLabelTimeout) {
+			clearTimeout(clearLabelTimeout);
+			clearLabelTimeout = null;
+		}
+
+		if (index !== null) {
+			activeLabelIndex = index;
+			return;
+		}
+
+		if (activeLabelIndex !== null) {
+			clearLabelTimeout = setTimeout(() => {
+				activeLabelIndex = null;
+				clearLabelTimeout = null;
+			}, 220);
+		}
+	}
+
 	function handleEmptyTap() {
 		if (!isMobile) return;
 		mobileArmedIndex = null;
@@ -60,13 +83,6 @@
 
 	function handlePointerLeave() {
 		hoveredIndex = null;
-		// Desktop: fade out label after short delay
-		if (!isMobile && activeLabelIndex !== null && !clearLabelTimeout) {
-			clearLabelTimeout = setTimeout(() => {
-				activeLabelIndex = null;
-				clearLabelTimeout = null;
-			}, 220);
-		}
 	}
 
 	$: isMobile = innerWidth <= 680;
@@ -75,16 +91,10 @@
 	$: minPolarAngle = isMobile ? 1.45 : 0.95;
 	$: maxPolarAngle = isMobile ? 1.45 : 2.15;
 
-	// Desktop: label follows pointermove-driven hoveredIndex
-	$: if (!isMobile && hoveredIndex !== null) {
-		if (clearLabelTimeout) { clearTimeout(clearLabelTimeout); clearLabelTimeout = null; }
-		activeLabelIndex = hoveredIndex;
-	}
-
-	$: hoveredItem =
+	$: activeLabel =
 		activeLabelIndex !== null && PLANET_NAV_ITEMS[activeLabelIndex]
-			? PLANET_NAV_ITEMS[activeLabelIndex]
-			: null;
+			? PLANET_NAV_ITEMS[activeLabelIndex].label.toLowerCase()
+			: '';
 </script>
 
 <svelte:window bind:innerWidth />
@@ -123,18 +133,17 @@
 				bind:loadError
 				onChildTap={handleChildTap}
 				onEmptyTap={handleEmptyTap}
+				onHoverChange={handleHoverChange}
 			/>
 		</Canvas>
 
-	</div>
+		{#if activeLabel}
+			<div class="overlay-label" aria-live="polite">
+				{activeLabel}
+			</div>
+		{/if}
 
-	<nav class="nav-strip" aria-label="Sections">
-		{#each PLANET_NAV_ITEMS as item, i}
-			<span class="nav-chip" class:active={activeLabelIndex === i}>
-				{item.label.toLowerCase()}
-			</span>
-		{/each}
-	</nav>
+	</div>
 </section>
 
 <style>
@@ -165,33 +174,30 @@
 		height: 100%;
 	}
 
-	.nav-strip {
-		display: flex;
-		justify-content: center;
-		gap: 0.5rem;
-		padding: 0.65rem 1rem;
-		flex-wrap: wrap;
+	.overlay-label {
+		position: absolute;
+		left: 50%;
+		top: 50%;
+		transform: translate(-50%, -50%);
+		z-index: 3;
 		pointer-events: none;
-		background: rgba(232, 232, 229, 0.92);
-	}
-
-	.nav-chip {
-		border: 1px solid rgba(117, 98, 68, 0.28);
+		border: 1px solid rgba(117, 98, 68, 0.7);
 		border-radius: 999px;
-		background: transparent;
-		color: rgba(93, 79, 59, 0.3);
-		padding: 0.38rem 0.7rem;
-		font-size: 0.82rem;
+		background: rgba(248, 246, 241, 0.97);
+		color: #5d4f3b;
+		padding: 0.55rem 0.85rem;
+		font-size: 0.92rem;
 		font-weight: 700;
 		line-height: 1;
 		white-space: nowrap;
-		transition: color 0.18s ease, background 0.18s ease, border-color 0.18s ease;
+		box-shadow: 0 8px 18px rgba(44, 37, 25, 0.18);
+		backdrop-filter: blur(10px);
 	}
 
-	.nav-chip.active {
-		border-color: rgba(117, 98, 68, 0.7);
-		background: rgba(248, 246, 241, 0.97);
-		color: #5d4f3b;
-		box-shadow: 0 4px 12px rgba(44, 37, 25, 0.14);
+	@media (max-width: 680px) {
+		.overlay-label {
+			font-size: 0.84rem;
+			padding: 0.46rem 0.72rem;
+		}
 	}
 </style>
