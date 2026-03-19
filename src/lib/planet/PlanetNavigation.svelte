@@ -6,11 +6,13 @@
 	import { PLANET_NAV_ITEMS } from '$lib/planet/navigation';
 
 	let hoveredIndex: number | null = null;
+	let activeLabelIndex: number | null = null;
 	let mobileArmedIndex: number | null = null;
 	let canvasWrapEl: HTMLDivElement;
 	let pointerDownX = 0;
 	let pointerDownY = 0;
 	let innerWidth = 1200;
+	let clearLabelTimeout: ReturnType<typeof setTimeout> | null = null;
 	let status = '';
 	let loadError = '';
 
@@ -33,10 +35,14 @@
 	}
 
 	function handleChildTap(index: number) {
+		activeLabelIndex = index;
+
 		if (!isMobile) return;
+
 		if (mobileArmedIndex === index) {
 			// Second tap on the same child → navigate
 			mobileArmedIndex = null;
+			activeLabelIndex = null;
 			openHotspot(index);
 		} else {
 			// First tap → show label
@@ -47,10 +53,27 @@
 	function handleEmptyTap() {
 		if (!isMobile) return;
 		mobileArmedIndex = null;
+		activeLabelIndex = null;
 	}
 
 	function handleSceneHoverChange(event: CustomEvent<{ index: number | null }>) {
 		hoveredIndex = event.detail.index;
+
+		if (isMobile) return;
+
+		if (clearLabelTimeout) {
+			clearTimeout(clearLabelTimeout);
+			clearLabelTimeout = null;
+		}
+
+		if (hoveredIndex !== null) {
+			activeLabelIndex = hoveredIndex;
+		} else if (activeLabelIndex !== null) {
+			clearLabelTimeout = setTimeout(() => {
+				activeLabelIndex = null;
+				clearLabelTimeout = null;
+			}, 220);
+		}
 	}
 
 	function handleSceneChildTap(event: CustomEvent<{ index: number }>) {
@@ -71,11 +94,9 @@
 	$: minPolarAngle = isMobile ? 1.45 : 0.95;
 	$: maxPolarAngle = isMobile ? 1.45 : 2.15;
 
-	$: labelIndex = isMobile ? mobileArmedIndex : hoveredIndex;
-
 	$: activeLabel =
-		labelIndex !== null && PLANET_NAV_ITEMS[labelIndex]
-			? PLANET_NAV_ITEMS[labelIndex].label.toLowerCase()
+		activeLabelIndex !== null && PLANET_NAV_ITEMS[activeLabelIndex]
+			? PLANET_NAV_ITEMS[activeLabelIndex].label.toLowerCase()
 			: '';
 </script>
 
