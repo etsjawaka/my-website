@@ -49,6 +49,18 @@
 		mobileArmedIndex = null;
 	}
 
+	function handleSceneHoverChange(event: CustomEvent<{ index: number | null }>) {
+		hoveredIndex = event.detail.index;
+	}
+
+	function handleSceneChildTap(event: CustomEvent<{ index: number }>) {
+		handleChildTap(event.detail.index);
+	}
+
+	function handleSceneEmptyTap() {
+		handleEmptyTap();
+	}
+
 	function handlePointerLeave() {
 		hoveredIndex = null;
 	}
@@ -101,8 +113,9 @@
 				bind:hoveredIndex
 				bind:status
 				bind:loadError
-				onChildTap={handleChildTap}
-				onEmptyTap={handleEmptyTap}
+				on:hoverchange={handleSceneHoverChange}
+				on:childtap={handleSceneChildTap}
+				on:emptytap={handleSceneEmptyTap}
 			/>
 		</Canvas>
 
@@ -144,29 +157,30 @@
 	}
 
 	.overlay-label {
-		position: absolute;
+		position: fixed;
 		left: 50%;
-		top: 50%;
+		top: 18vh;
 		transform: translate(-50%, -50%);
-		z-index: 3;
+		z-index: 999;
 		pointer-events: none;
 		border: 1px solid rgba(117, 98, 68, 0.7);
 		border-radius: 999px;
-		background: rgba(248, 246, 241, 0.97);
+		background: rgba(248, 246, 241, 0.98);
 		color: #5d4f3b;
-		padding: 0.55rem 0.85rem;
-		font-size: 0.92rem;
+		padding: 0.65rem 1rem;
+		font-size: 1rem;
 		font-weight: 700;
 		line-height: 1;
 		white-space: nowrap;
-		box-shadow: 0 8px 18px rgba(44, 37, 25, 0.18);
+		box-shadow: 0 10px 24px rgba(44, 37, 25, 0.22);
 		backdrop-filter: blur(10px);
 	}
 
 	@media (max-width: 680px) {
 		.overlay-label {
-			font-size: 0.84rem;
-			padding: 0.46rem 0.72rem;
+			top: 16vh;
+			font-size: 0.88rem;
+			padding: 0.52rem 0.8rem;
 		}
 	}
 </style>

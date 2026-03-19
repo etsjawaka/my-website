@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
+	import { createEventDispatcher, onMount } from 'svelte';
 	import { SvelteMap, SvelteSet } from 'svelte/reactivity';
 	import { get } from 'svelte/store';
 	import { T, useTask, useThrelte } from '@threlte/core';
@@ -22,13 +22,17 @@
 	export let status = 'Loading planet model...';
 	export let loadError = '';
 	export let onHotspotsChange: (hotspots: PlanetHotspot[]) => void = () => {};
-	export let onChildTap: (index: number) => void = () => {};
-	export let onEmptyTap: () => void = () => {};
 
 	let gltf: ThrelteGltf | null = null;
 	let mounted = false;
 	let planetRoot: Object3D | null = null;
 	let clickTargets: Object3D[] = [];
+
+	const dispatch = createEventDispatcher<{
+		hoverchange: { index: number | null };
+		childtap: { index: number };
+		emptytap: undefined;
+	}>();
 
 	const loader = useGltf();
 	const { camera, dom, invalidate } = useThrelte();
@@ -210,20 +214,23 @@
 
 	function handlePointerMove(event: PointerEvent) {
 		hoveredIndex = pickHoveredIndex(event);
+		dispatch('hoverchange', { index: hoveredIndex });
 	}
 
 	function handlePointerDown(event: PointerEvent) {
 		const idx = pickHoveredIndex(event);
 		hoveredIndex = idx;
+		dispatch('hoverchange', { index: idx });
 		if (idx !== null) {
-			onChildTap(idx);
+			dispatch('childtap', { index: idx });
 		} else {
-			onEmptyTap();
+			dispatch('emptytap');
 		}
 	}
 
 	function handlePointerLeave() {
 		hoveredIndex = null;
+		dispatch('hoverchange', { index: null });
 	}
 
 	useTask(
