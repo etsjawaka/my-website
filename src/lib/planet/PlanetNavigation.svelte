@@ -126,12 +126,15 @@
 			/>
 		</Canvas>
 
-		{#if hoveredItem}
-			<span class="hover-label">
-				{hoveredItem.label.toLowerCase()}
-			</span>
-		{/if}
 	</div>
+
+	<nav class="nav-strip" aria-label="Sections">
+		{#each PLANET_NAV_ITEMS as item, i}
+			<span class="nav-chip" class:active={activeLabelIndex === i}>
+				{item.label.toLowerCase()}
+			</span>
+		{/each}
+	</nav>
 </section>
 
 <style>
@@ -139,12 +142,15 @@
 		height: 100dvh;
 		min-height: 100vh;
 		overflow: hidden;
+		display: flex;
+		flex-direction: column;
 	}
 
 	.canvas-wrap {
 		position: relative;
 		width: 100%;
-		height: 100%;
+		flex: 1 1 0;
+		min-height: 0;
 		touch-action: none;
 		background:
 			radial-gradient(circle at 50% 14%, rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0) 34%),
@@ -159,31 +165,33 @@
 		height: 100%;
 	}
 
-	.hover-label {
-		position: absolute;
-		bottom: 52px;
-		left: 50%;
-		transform: translateX(-50%);
-		z-index: 3;
+	.nav-strip {
+		display: flex;
+		justify-content: center;
+		gap: 0.5rem;
+		padding: 0.65rem 1rem;
+		flex-wrap: wrap;
 		pointer-events: none;
-		border: 1px solid rgba(117, 98, 68, 0.55);
-		border-radius: 999px;
-		background: rgba(248, 246, 241, 0.97);
-		color: #5d4f3b;
-		padding: 0.5rem 0.75rem;
-		font-size: 0.88rem;
-		font-weight: 700;
-		backdrop-filter: blur(10px);
-		line-height: 1;
-		white-space: nowrap;
-		box-shadow: 0 8px 18px rgba(44, 37, 25, 0.18);
+		background: rgba(232, 232, 229, 0.92);
 	}
 
-	@media (max-width: 680px) {
-		.hover-label {
-			font-size: 0.8rem;
-			padding: 0.42rem 0.62rem;
-			bottom: 40px;
-		}
+	.nav-chip {
+		border: 1px solid rgba(117, 98, 68, 0.28);
+		border-radius: 999px;
+		background: transparent;
+		color: rgba(93, 79, 59, 0.3);
+		padding: 0.38rem 0.7rem;
+		font-size: 0.82rem;
+		font-weight: 700;
+		line-height: 1;
+		white-space: nowrap;
+		transition: color 0.18s ease, background 0.18s ease, border-color 0.18s ease;
+	}
+
+	.nav-chip.active {
+		border-color: rgba(117, 98, 68, 0.7);
+		background: rgba(248, 246, 241, 0.97);
+		color: #5d4f3b;
+		box-shadow: 0 4px 12px rgba(44, 37, 25, 0.14);
 	}
 </style>
