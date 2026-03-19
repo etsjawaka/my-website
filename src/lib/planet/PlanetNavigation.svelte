@@ -6,13 +6,11 @@
 	import { PLANET_NAV_ITEMS } from '$lib/planet/navigation';
 
 	let hoveredIndex: number | null = null;
-	let activeLabelIndex: number | null = null;
 	let mobileArmedIndex: number | null = null;
 	let canvasWrapEl: HTMLDivElement;
 	let pointerDownX = 0;
 	let pointerDownY = 0;
 	let innerWidth = 1200;
-	let clearLabelTimeout: ReturnType<typeof setTimeout> | null = null;
 	let status = '';
 	let loadError = '';
 
@@ -39,46 +37,16 @@
 		if (mobileArmedIndex === index) {
 			// Second tap on the same child → navigate
 			mobileArmedIndex = null;
-			activeLabelIndex = null;
 			openHotspot(index);
 		} else {
 			// First tap → show label
-			if (clearLabelTimeout) {
-				clearTimeout(clearLabelTimeout);
-				clearLabelTimeout = null;
-			}
 			mobileArmedIndex = index;
-			activeLabelIndex = index;
-		}
-	}
-
-	function handleHoverChange(index: number | null) {
-		hoveredIndex = index;
-
-		if (isMobile) return;
-
-		if (clearLabelTimeout) {
-			clearTimeout(clearLabelTimeout);
-			clearLabelTimeout = null;
-		}
-
-		if (index !== null) {
-			activeLabelIndex = index;
-			return;
-		}
-
-		if (activeLabelIndex !== null) {
-			clearLabelTimeout = setTimeout(() => {
-				activeLabelIndex = null;
-				clearLabelTimeout = null;
-			}, 220);
 		}
 	}
 
 	function handleEmptyTap() {
 		if (!isMobile) return;
 		mobileArmedIndex = null;
-		activeLabelIndex = null;
 	}
 
 	function handlePointerLeave() {
@@ -91,9 +59,11 @@
 	$: minPolarAngle = isMobile ? 1.45 : 0.95;
 	$: maxPolarAngle = isMobile ? 1.45 : 2.15;
 
+	$: labelIndex = isMobile ? mobileArmedIndex : hoveredIndex;
+
 	$: activeLabel =
-		activeLabelIndex !== null && PLANET_NAV_ITEMS[activeLabelIndex]
-			? PLANET_NAV_ITEMS[activeLabelIndex].label.toLowerCase()
+		labelIndex !== null && PLANET_NAV_ITEMS[labelIndex]
+			? PLANET_NAV_ITEMS[labelIndex].label.toLowerCase()
 			: '';
 </script>
 
@@ -133,7 +103,6 @@
 				bind:loadError
 				onChildTap={handleChildTap}
 				onEmptyTap={handleEmptyTap}
-				onHoverChange={handleHoverChange}
 			/>
 		</Canvas>
 

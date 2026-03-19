@@ -24,7 +24,6 @@
 	export let onHotspotsChange: (hotspots: PlanetHotspot[]) => void = () => {};
 	export let onChildTap: (index: number) => void = () => {};
 	export let onEmptyTap: () => void = () => {};
-	export let onHoverChange: (index: number | null) => void = () => {};
 
 	let gltf: ThrelteGltf | null = null;
 	let mounted = false;
@@ -211,13 +210,11 @@
 
 	function handlePointerMove(event: PointerEvent) {
 		hoveredIndex = pickHoveredIndex(event);
-		onHoverChange(hoveredIndex);
 	}
 
 	function handlePointerDown(event: PointerEvent) {
 		const idx = pickHoveredIndex(event);
 		hoveredIndex = idx;
-		onHoverChange(idx);
 		if (idx !== null) {
 			onChildTap(idx);
 		} else {
@@ -227,7 +224,6 @@
 
 	function handlePointerLeave() {
 		hoveredIndex = null;
-		onHoverChange(null);
 	}
 
 	useTask(
