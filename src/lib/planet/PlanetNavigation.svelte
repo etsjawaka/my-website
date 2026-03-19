@@ -8,7 +8,6 @@
 	let hoveredIndex: number | null = null;
 	let activeLabelIndex: number | null = null;
 	let mobileArmedIndex: number | null = null;
-	let tappedIndex: number | null = null;
 	let canvasWrapEl: HTMLDivElement;
 	let pointerDownX = 0;
 	let pointerDownY = 0;
@@ -26,42 +25,37 @@
 	function handlePointerDown(event: PointerEvent) {
 		pointerDownX = event.clientX;
 		pointerDownY = event.clientY;
-		// PlanetScene's canvas listener fires before this (on bubble), so hoveredIndex is already set.
-		tappedIndex = hoveredIndex;
 	}
 
 	function handlePointerUp(event: PointerEvent) {
 		const moved = Math.hypot(event.clientX - pointerDownX, event.clientY - pointerDownY);
 		if (moved > 16) return;
+		// Desktop only: mobile navigation is handled via handleChildTap
+		if (!isMobile && hoveredIndex !== null) openHotspot(hoveredIndex);
+	}
 
-		if (!isMobile) {
-			if (hoveredIndex !== null) openHotspot(hoveredIndex);
-			return;
-		}
-
-		// Mobile: use tappedIndex (captured at pointerdown) because
-		// pointerleave clears hoveredIndex before pointerup fires on touch.
-		if (tappedIndex === null) {
-			// Tapped empty space — dismiss any armed label
+	function handleChildTap(index: number) {
+		if (!isMobile) return;
+		if (mobileArmedIndex === index) {
+			// Second tap on the same child → navigate
 			mobileArmedIndex = null;
 			activeLabelIndex = null;
-			return;
+			openHotspot(index);
+		} else {
+			// First tap → show label
+			if (clearLabelTimeout) {
+				clearTimeout(clearLabelTimeout);
+				clearLabelTimeout = null;
+			}
+			mobileArmedIndex = index;
+			activeLabelIndex = index;
 		}
+	}
 
-		if (mobileArmedIndex === tappedIndex) {
-			// Second tap on same child: navigate
-			mobileArmedIndex = null;
-			openHotspot(tappedIndex);
-			return;
-		}
-
-		// First tap on a child: show label
-		mobileArmedIndex = tappedIndex;
-		activeLabelIndex = tappedIndex;
-		if (clearLabelTimeout) {
-			clearTimeout(clearLabelTimeout);
-			clearLabelTimeout = null;
-		}
+	function handleEmptyTap() {
+		if (!isMobile) return;
+		mobileArmedIndex = null;
+		activeLabelIndex = null;
 	}
 
 	function handlePointerLeave() {
@@ -135,6 +129,8 @@
 				bind:hoveredIndex
 				bind:status
 				bind:loadError
+				onChildTap={handleChildTap}
+				onEmptyTap={handleEmptyTap}
 			/>
 		</Canvas>
 

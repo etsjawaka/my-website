@@ -22,6 +22,8 @@
 	export let status = 'Loading planet model...';
 	export let loadError = '';
 	export let onHotspotsChange: (hotspots: PlanetHotspot[]) => void = () => {};
+	export let onChildTap: (index: number) => void = () => {};
+	export let onEmptyTap: () => void = () => {};
 
 	let gltf: ThrelteGltf | null = null;
 	let mounted = false;
@@ -211,7 +213,13 @@
 	}
 
 	function handlePointerDown(event: PointerEvent) {
-		hoveredIndex = pickHoveredIndex(event);
+		const idx = pickHoveredIndex(event);
+		hoveredIndex = idx;
+		if (idx !== null) {
+			onChildTap(idx);
+		} else {
+			onEmptyTap();
+		}
 	}
 
 	function handlePointerLeave() {
