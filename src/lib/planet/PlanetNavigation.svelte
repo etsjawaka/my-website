@@ -60,7 +60,13 @@
 
 	function handlePointerLeave() {
 		hoveredIndex = null;
-		if (!isMobile) mobileArmedIndex = null;
+		// Desktop: fade out label after short delay
+		if (!isMobile && activeLabelIndex !== null && !clearLabelTimeout) {
+			clearLabelTimeout = setTimeout(() => {
+				activeLabelIndex = null;
+				clearLabelTimeout = null;
+			}, 220);
+		}
 	}
 
 	$: isMobile = innerWidth <= 680;
@@ -69,24 +75,10 @@
 	$: minPolarAngle = isMobile ? 1.45 : 0.95;
 	$: maxPolarAngle = isMobile ? 1.45 : 2.15;
 
-	$: if (hoveredIndex !== null) {
-		if (clearLabelTimeout) {
-			clearTimeout(clearLabelTimeout);
-			clearLabelTimeout = null;
-		}
+	// Desktop: label follows pointermove-driven hoveredIndex
+	$: if (!isMobile && hoveredIndex !== null) {
+		if (clearLabelTimeout) { clearTimeout(clearLabelTimeout); clearLabelTimeout = null; }
 		activeLabelIndex = hoveredIndex;
-	}
-
-	$: if (
-		hoveredIndex === null &&
-		activeLabelIndex !== null &&
-		!clearLabelTimeout &&
-		mobileArmedIndex === null
-	) {
-		clearLabelTimeout = setTimeout(() => {
-			activeLabelIndex = null;
-			clearLabelTimeout = null;
-		}, 220);
 	}
 
 	$: hoveredItem =
@@ -153,6 +145,7 @@
 		position: relative;
 		width: 100%;
 		height: 100%;
+		touch-action: none;
 		background:
 			radial-gradient(circle at 50% 14%, rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0) 34%),
 			radial-gradient(circle at 50% 54%, rgba(138, 121, 93, 0.08), rgba(138, 121, 93, 0) 48%),
