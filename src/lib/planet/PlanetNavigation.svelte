@@ -25,6 +25,24 @@
 	function handlePointerDown(event: PointerEvent) {
 		pointerDownX = event.clientX;
 		pointerDownY = event.clientY;
+
+		if (!isMobile) return;
+
+		if (hoveredIndex === null) {
+			mobileArmedIndex = null;
+			activeLabelIndex = null;
+			return;
+		}
+
+		if (mobileArmedIndex === hoveredIndex) {
+			mobileArmedIndex = null;
+			activeLabelIndex = null;
+			openHotspot(hoveredIndex);
+			return;
+		}
+
+		mobileArmedIndex = hoveredIndex;
+		activeLabelIndex = hoveredIndex;
 	}
 
 	function handlePointerUp(event: PointerEvent) {
@@ -34,33 +52,17 @@
 		if (!isMobile && hoveredIndex !== null) openHotspot(hoveredIndex);
 	}
 
-	function handleChildTap(index: number) {
-		activeLabelIndex = index;
-
-		if (!isMobile) return;
-
-		if (mobileArmedIndex === index) {
-			// Second tap on the same child → navigate
-			mobileArmedIndex = null;
-			activeLabelIndex = null;
-			openHotspot(index);
-		} else {
-			// First tap → show label
-			mobileArmedIndex = index;
-		}
+	function handlePointerLeave() {
+		hoveredIndex = null;
 	}
 
-	function handleEmptyTap() {
-		if (!isMobile) return;
-		mobileArmedIndex = null;
-		activeLabelIndex = null;
-	}
+	$: isMobile = innerWidth <= 680;
+	$: cameraDistance = isMobile ? 5.25 : 4.4;
+	$: cameraFov = isMobile ? 36 : 30;
+	$: minPolarAngle = isMobile ? 1.45 : 0.95;
+	$: maxPolarAngle = isMobile ? 1.45 : 2.15;
 
-	function handleSceneHoverChange(event: CustomEvent<{ index: number | null }>) {
-		hoveredIndex = event.detail.index;
-
-		if (isMobile) return;
-
+	$: if (!isMobile) {
 		if (clearLabelTimeout) {
 			clearTimeout(clearLabelTimeout);
 			clearLabelTimeout = null;
@@ -75,24 +77,6 @@
 			}, 220);
 		}
 	}
-
-	function handleSceneChildTap(event: CustomEvent<{ index: number }>) {
-		handleChildTap(event.detail.index);
-	}
-
-	function handleSceneEmptyTap() {
-		handleEmptyTap();
-	}
-
-	function handlePointerLeave() {
-		hoveredIndex = null;
-	}
-
-	$: isMobile = innerWidth <= 680;
-	$: cameraDistance = isMobile ? 5.25 : 4.4;
-	$: cameraFov = isMobile ? 36 : 30;
-	$: minPolarAngle = isMobile ? 1.45 : 0.95;
-	$: maxPolarAngle = isMobile ? 1.45 : 2.15;
 
 	$: activeLabel =
 		activeLabelIndex !== null && PLANET_NAV_ITEMS[activeLabelIndex]
@@ -134,9 +118,6 @@
 				bind:hoveredIndex
 				bind:status
 				bind:loadError
-				on:hoverchange={handleSceneHoverChange}
-				on:childtap={handleSceneChildTap}
-				on:emptytap={handleSceneEmptyTap}
 			/>
 		</Canvas>
 
