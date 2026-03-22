@@ -1,7 +1,5 @@
 <script lang="ts">
-	import { page } from '$app/stores';
 	import favicon from '$lib/assets/favicon.svg';
-	import PlanetNavigation from '$lib/planet/PlanetNavigation.svelte';
 
 	let { children } = $props();
 </script>
@@ -11,11 +9,7 @@
 	<link rel="icon" href={favicon} />
 </svelte:head>
 
-{#if $page.url.pathname === '/'}
-	<PlanetNavigation />
-{:else}
-	{@render children()}
-{/if}
+{@render children()}
 
 <style>
 	:global(:root) {
