@@ -56,26 +56,11 @@
 	$: cameraFov = isMobile ? 36 : 30;
 	$: minPolarAngle = isMobile ? 1.45 : 0.95;
 	$: maxPolarAngle = isMobile ? 1.45 : 2.15;
-
-	$: labelIndex = isMobile ? mobileArmedIndex : hoveredIndex;
-
-	$: activeLabel =
-		labelIndex !== null && PLANET_NAV_ITEMS[labelIndex]
-			? PLANET_NAV_ITEMS[labelIndex].label.toLowerCase()
-			: '';
 </script>
 
 <svelte:window bind:innerWidth />
 
 <section class="planet-shell">
-	<header class="label-zone" aria-live="polite">
-		{#if activeLabel}
-			<span class="label-pill">{activeLabel}</span>
-		{:else}
-			<span class="label-hint">hover or tap a child object</span>
-		{/if}
-	</header>
-
 	<!-- svelte-ignore a11y_no_static_element_interactions -->
 	<div
 		class="canvas-wrap"
@@ -122,35 +107,6 @@
 		flex-direction: column;
 	}
 
-	.label-zone {
-		display: grid;
-		place-items: center;
-		min-height: 56px;
-		padding: 0.5rem 0.9rem;
-		background: rgba(232, 232, 229, 0.92);
-		border-bottom: 1px solid rgba(117, 98, 68, 0.2);
-	}
-
-	.label-pill {
-		border: 1px solid rgba(117, 98, 68, 0.7);
-		border-radius: 999px;
-		background: rgba(248, 246, 241, 0.98);
-		color: #5d4f3b;
-		padding: 0.5rem 0.85rem;
-		font-size: 0.92rem;
-		font-weight: 700;
-		line-height: 1;
-		white-space: nowrap;
-	}
-
-	.label-hint {
-		color: rgba(93, 79, 59, 0.55);
-		font-size: 0.84rem;
-		font-weight: 600;
-		line-height: 1;
-		white-space: nowrap;
-	}
-
 	.canvas-wrap {
 		position: relative;
 		width: 100%;
@@ -171,18 +127,5 @@
 	}
 
 	@media (max-width: 680px) {
-		.label-zone {
-			min-height: 52px;
-			padding: 0.42rem 0.72rem;
-		}
-
-		.label-pill {
-			font-size: 0.84rem;
-			padding: 0.46rem 0.72rem;
-		}
-
-		.label-hint {
-			font-size: 0.76rem;
-		}
 	}
 </style>
