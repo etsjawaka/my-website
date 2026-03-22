@@ -56,13 +56,6 @@
 	$: cameraFov = isMobile ? 36 : 30;
 	$: minPolarAngle = isMobile ? 1.45 : 0.95;
 	$: maxPolarAngle = isMobile ? 1.45 : 2.15;
-
-	$: labelIndex = isMobile ? mobileArmedIndex : hoveredIndex;
-
-	$: activeLabel =
-		labelIndex !== null && PLANET_NAV_ITEMS[labelIndex]
-			? PLANET_NAV_ITEMS[labelIndex].label.toLowerCase()
-			: '';
 </script>
 
 <svelte:window bind:innerWidth />
@@ -103,10 +96,6 @@
 		</Canvas>
 
 	</div>
-
-	{#if activeLabel}
-		<div class="label-chip" aria-live="polite">{activeLabel}</div>
-	{/if}
 </section>
 
 <style>
@@ -135,24 +124,6 @@
 		display: block;
 		width: 100%;
 		height: 100%;
-	}
-
-	.label-chip {
-		position: fixed;
-		top: 1rem;
-		right: 1rem;
-		z-index: 999;
-		pointer-events: none;
-		border: 1px solid rgba(117, 98, 68, 0.7);
-		border-radius: 999px;
-		background: rgba(248, 246, 241, 0.98);
-		color: #5d4f3b;
-		padding: 0.45rem 0.75rem;
-		font-size: 0.86rem;
-		font-weight: 700;
-		line-height: 1;
-		white-space: nowrap;
-		box-shadow: 0 8px 16px rgba(44, 37, 25, 0.16);
 	}
 
 	@media (max-width: 680px) {
