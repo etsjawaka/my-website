@@ -22,6 +22,7 @@
 	export let status = 'Loading planet model...';
 	export let loadError = '';
 	export let onHotspotsChange: (hotspots: PlanetHotspot[]) => void = () => {};
+	export let onHoverChange: (index: number | null) => void = () => {};
 	let gltf: ThrelteGltf | null = null;
 	let mounted = false;
 	let planetRoot: Object3D | null = null;
@@ -206,14 +207,17 @@
 
 	function handlePointerMove(event: PointerEvent) {
 		hoveredIndex = pickHoveredIndex(event);
+		onHoverChange(hoveredIndex);
 	}
 
 	function handlePointerDown(event: PointerEvent) {
 		hoveredIndex = pickHoveredIndex(event);
+		onHoverChange(hoveredIndex);
 	}
 
 	function handlePointerLeave() {
 		hoveredIndex = null;
+		onHoverChange(null);
 	}
 
 	useTask(

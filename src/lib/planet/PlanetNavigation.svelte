@@ -6,6 +6,7 @@
 	import { PLANET_NAV_ITEMS } from '$lib/planet/navigation';
 
 	let hoveredIndex: number | null = null;
+	let labelIndex: number | null = null;
 	let mobileArmedIndex: number | null = null;
 	let canvasWrapEl: HTMLDivElement;
 	let pointerDownX = 0;
@@ -92,11 +93,12 @@
 				bind:hoveredIndex
 				bind:status
 				bind:loadError
+				onHoverChange={(idx) => { labelIndex = idx; }}
 			/>
 		</Canvas>
 
-		{#if hoveredIndex !== null}
-			<div class="term-label" aria-live="polite">&gt; {PLANET_NAV_ITEMS[hoveredIndex].label.toLowerCase()}</div>
+		{#if labelIndex !== null}
+			<div class="term-label" aria-live="polite">&gt; {PLANET_NAV_ITEMS[labelIndex].label.toLowerCase()}</div>
 		{/if}
 	</div>
 </section>
@@ -138,7 +140,7 @@
 		font-family: 'Courier New', Courier, monospace;
 		font-size: clamp(1.4rem, 4vw, 2.6rem);
 		font-weight: 400;
-		color: rgba(80, 68, 50, 0.18);
+		color: rgba(80, 68, 50, 0.55);
 		letter-spacing: 0.06em;
 		user-select: none;
 		transition: opacity 0.25s ease;
