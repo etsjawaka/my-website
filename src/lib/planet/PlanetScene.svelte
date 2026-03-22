@@ -26,8 +26,6 @@
 	let mounted = false;
 	let planetRoot: Object3D | null = null;
 	let clickTargets: Object3D[] = [];
-	let displayLabelIndex: number | null = null;
-
 	const loader = useGltf();
 	const { camera, dom, invalidate } = useThrelte();
 	const worldPosition = new Vector3();
@@ -208,18 +206,14 @@
 
 	function handlePointerMove(event: PointerEvent) {
 		hoveredIndex = pickHoveredIndex(event);
-		if (!isMobile) displayLabelIndex = hoveredIndex;
 	}
 
 	function handlePointerDown(event: PointerEvent) {
-		const idx = pickHoveredIndex(event);
-		hoveredIndex = idx;
-		displayLabelIndex = idx;
+		hoveredIndex = pickHoveredIndex(event);
 	}
 
 	function handlePointerLeave() {
 		hoveredIndex = null;
-		if (!isMobile) displayLabelIndex = null;
 	}
 
 	useTask(
@@ -271,48 +265,12 @@
 			dom.removeEventListener('pointerdown', handlePointerDown);
 			dom.removeEventListener('pointermove', handlePointerMove);
 			dom.removeEventListener('pointerleave', handlePointerLeave);
-			displayLabelIndex = null;
 			resetHotspots();
 		};
 	});
 
-	$: overlayLabel =
-		displayLabelIndex !== null && items[displayLabelIndex]
-			? items[displayLabelIndex].label.toLowerCase()
-			: '';
 </script>
 
 {#if gltf}
 	<T is={gltf.scene} />
 {/if}
-
-{#if overlayLabel}
-	<div class="scene-label" aria-live="polite">{overlayLabel}</div>
-{/if}
-
-<style>
-	.scene-label {
-		position: fixed;
-		top: 1rem;
-		right: 1rem;
-		z-index: 999;
-		pointer-events: none;
-		border: 1px solid rgba(117, 98, 68, 0.7);
-		border-radius: 999px;
-		background: rgba(248, 246, 241, 0.98);
-		color: #5d4f3b;
-		padding: 0.45rem 0.75rem;
-		font-size: 0.86rem;
-		font-weight: 700;
-		line-height: 1;
-		white-space: nowrap;
-		box-shadow: 0 8px 16px rgba(44, 37, 25, 0.16);
-	}
-
-	@media (max-width: 680px) {
-		.scene-label {
-			font-size: 0.8rem;
-			padding: 0.4rem 0.66rem;
-		}
-	}
-</style>

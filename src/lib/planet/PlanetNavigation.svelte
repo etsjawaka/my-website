@@ -95,6 +95,9 @@
 			/>
 		</Canvas>
 
+		{#if hoveredIndex !== null}
+			<div class="term-label" aria-live="polite">&gt; {PLANET_NAV_ITEMS[hoveredIndex].label.toLowerCase()}</div>
+		{/if}
 	</div>
 </section>
 
@@ -124,6 +127,21 @@
 		display: block;
 		width: 100%;
 		height: 100%;
+	}
+
+	.term-label {
+		position: absolute;
+		bottom: 2.2rem;
+		left: 2rem;
+		z-index: 10;
+		pointer-events: none;
+		font-family: 'Courier New', Courier, monospace;
+		font-size: clamp(1.4rem, 4vw, 2.6rem);
+		font-weight: 400;
+		color: rgba(80, 68, 50, 0.18);
+		letter-spacing: 0.06em;
+		user-select: none;
+		transition: opacity 0.25s ease;
 	}
 
 	@media (max-width: 680px) {
