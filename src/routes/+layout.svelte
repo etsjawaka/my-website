@@ -14,7 +14,7 @@
 
 {#if $page.url.pathname !== '/'}
 	<a class="home-panel" href="/">
-		<span class="home-term-line">ione:forge</span>
+		<span class="home-term-line">mainpage</span>
 	</a>
 {/if}
 
