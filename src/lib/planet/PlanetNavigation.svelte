@@ -4,10 +4,9 @@
 	import { OrbitControls } from '@threlte/extras';
 	import PlanetScene from '$lib/planet/PlanetScene.svelte';
 	import { PLANET_NAV_ITEMS } from '$lib/planet/navigation';
+	import { hoveredPlanetLabelIndex } from '$lib/planet/hover-store';
 
 	let hoveredIndex: number | null = null;
-	let labelIndex: number | null = null;
-	let planetReady = false;
 	let mobileArmedIndex: number | null = null;
 	let canvasWrapEl: HTMLDivElement;
 	let planetSceneRef: any;
@@ -67,10 +66,9 @@
 	$: minPolarAngle = isMobile ? 1.45 : 0.95;
 	$: maxPolarAngle = isMobile ? 1.45 : 2.15;
 	$: activeLabel =
-		labelIndex !== null && PLANET_NAV_ITEMS[labelIndex]
-			? PLANET_NAV_ITEMS[labelIndex].label.toLowerCase()
+		$hoveredPlanetLabelIndex !== null && PLANET_NAV_ITEMS[$hoveredPlanetLabelIndex]
+			? PLANET_NAV_ITEMS[$hoveredPlanetLabelIndex].label.toLowerCase()
 			: '';
-	$: console.log('[PlanetNav] labelIndex/activeLabel:', labelIndex, activeLabel);
 </script>
 
 <svelte:window bind:innerWidth />
@@ -81,8 +79,10 @@
 		class="canvas-wrap"
 		bind:this={canvasWrapEl}
 		on:pointerdown={handlePointerDown}
-		on:pointermove={() => {
-			// Events handled by PlanetScene directly
+		on:pointermove={(event) => {
+			if (planetSceneRef?.updateHoverFromEvent) {
+				planetSceneRef.updateHoverFromEvent(event, 'move');
+			}
 		}}
 		on:pointerup={handlePointerUp}
 		on:pointerleave={handlePointerLeave}
@@ -111,22 +111,11 @@
 				bind:hoveredIndex
 				bind:status
 				bind:loadError
-				onHoverChange={(idx) => {
-					console.log('[PlanetNav onHoverChange callback] received idx:', idx);
-					labelIndex = idx;
-					console.log('[PlanetNav onHoverChange callback] set labelIndex to:', labelIndex);
-				}}
-				onPlanetReady={() => {
-					console.log('[PlanetNav] Planet is ready!');
-					planetReady = true;
-				}}
 			/>
 		</Canvas>
 
 		<div class="term-panel" aria-live="polite">
-			{#if !planetReady}
-				<div class="term-line">loading...</div>
-			{:else if labelIndex !== null}
+			{#if $hoveredPlanetLabelIndex !== null}
 				<div class="term-line">{activeLabel}</div>
 			{/if}
 		</div>

@@ -15,6 +15,7 @@
 		Vector3
 	} from 'three';
 	import type { PlanetHotspot, PlanetNavItem } from '$lib/planet/navigation';
+	import { hoveredPlanetLabelIndex } from '$lib/planet/hover-store';
 
 	export let items: PlanetNavItem[] = [];
 	export let isMobile = false;
@@ -22,15 +23,12 @@
 	export let status = 'Loading planet model...';
 	export let loadError = '';
 	export let onHotspotsChange: (hotspots: PlanetHotspot[]) => void = () => {};
-	export let onHoverChange: (index: number | null) => void = () => {};
-	export let onPlanetReady: () => void = () => {};
 	let gltf: ThrelteGltf | null = null;
 	let mounted = false;
 	let planetRoot: Object3D | null = null;
 	let clickTargets: Object3D[] = [];
 	const loader = useGltf();
 	const { camera, dom, invalidate } = useThrelte();
-	console.log('[PlanetScene script load] useThrelte dom:', dom);
 	const worldPosition = new Vector3();
 	const modelCenter = new Vector3();
 	const modelBounds = new Box3();
@@ -208,25 +206,16 @@
 	}
 
 	function handlePointerMove(event: PointerEvent) {
-		console.log('[handlePointerMove] fired');
 		const idx = pickHoveredIndex(event);
-		console.log('[PlanetScene] handlePointerMove -> pickHoveredIndex:', idx);
 		hoveredIndex = idx;
-		onHoverChange(hoveredIndex);
 	}
 
 	function handlePointerDown(event: PointerEvent) {
-		console.log('[handlePointerDown] fired');
 		const idx = pickHoveredIndex(event);
-		console.log('[PlanetScene] handlePointerDown -> pickHoveredIndex:', idx);
 		hoveredIndex = idx;
-		onHoverChange(hoveredIndex);
 	}
 	function handlePointerLeave() {
-		console.log('[handlePointerLeave] fired');
-		console.log('[PlanetScene] handlePointerLeave');
 		hoveredIndex = null;
-		onHoverChange(null);
 	}
 
 	/**
@@ -237,13 +226,11 @@
 			handlePointerLeave();
 		} else {
 			const idx = pickHoveredIndex(event);
-			console.log(`[PlanetScene] updateHoverFromEvent(${eventType}) -> pickHoveredIndex:`, idx);
 			hoveredIndex = idx;
-			console.log('[PlanetScene] calling onHoverChange with:', hoveredIndex);
-			onHoverChange(hoveredIndex);
-			console.log('[PlanetScene] onHoverChange completed');
 		}
 	}
+
+	$: hoveredPlanetLabelIndex.set(hoveredIndex);
 
 	useTask(
 		(delta: number) => {
@@ -281,33 +268,24 @@
 	);
 
 	onMount(() => {
-		console.log('[PlanetScene onMount] Starting, dom:', dom);
 		mounted = true;
 		resetHotspots();
 		loadModel();
 
-		if (!dom) {
-			console.error('[PlanetScene onMount] dom is null or undefined!');
-			return () => {};
+		if (dom) {
+			dom.addEventListener('pointermove', handlePointerMove);
+			dom.addEventListener('pointerdown', handlePointerDown);
+			dom.addEventListener('pointerleave', handlePointerLeave);
 		}
-
-		console.log('[PlanetScene onMount] Attaching event listeners to dom');
-		// Attach event listeners to the Threlte canvas element
-		dom.addEventListener('pointermove', handlePointerMove);
-		dom.addEventListener('pointerdown', handlePointerDown);
-		dom.addEventListener('pointerleave', handlePointerLeave);
-		console.log('[PlanetScene onMount] Event listeners attached successfully');
-		
-		// Signal that component is ready
-		console.log('[PlanetScene onMount] Calling onPlanetReady');
-		onPlanetReady();
 
 		return () => {
 			mounted = false;
-			console.log('[PlanetScene cleanup] Removing event listeners');
-			dom.removeEventListener('pointermove', handlePointerMove);
-			dom.removeEventListener('pointerdown', handlePointerDown);
-			dom.removeEventListener('pointerleave', handlePointerLeave);
+			hoveredPlanetLabelIndex.set(null);
+			if (dom) {
+				dom.removeEventListener('pointermove', handlePointerMove);
+				dom.removeEventListener('pointerdown', handlePointerDown);
+				dom.removeEventListener('pointerleave', handlePointerLeave);
+			}
 			resetHotspots();
 		};
 	});
