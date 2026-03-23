@@ -4,23 +4,30 @@
 <main aria-label="CV page">
 	<section class="page-panel">
 		<h1>cv</h1>
-		<p>
-			Use this section for your artistic statement and an overview of practice, exhibitions,
-			commissions, and education.
-		</p>
+		<p>Education</p>
 
 		<div class="timeline">
 			<article class="entry">
-				<h2>selected exhibitions</h2>
-				<p>2026 - exhibition title, venue</p>
-			</article>
-			<article class="entry">
 				<h2>education</h2>
-				<p>Year - school or program</p>
-			</article>
-			<article class="entry">
-				<h2>collaborations</h2>
-				<p>Year - project and partners</p>
+				<ul class="cv-list">
+					<li>
+						<p class="cv-title">Masters Degree, Oslo National Academy of the Arts</p>
+						<p>Metal Arts and Digital Form</p>
+						<p>2009-2014</p>
+					</li>
+					<li>
+						<p class="cv-title">Strykejernet Art School, Oslo</p>
+						<p>2008-2009</p>
+					</li>
+					<li>
+						<p class="cv-title">Art Students League of New York</p>
+						<p>2008</p>
+					</li>
+					<li>
+						<p class="cv-title">Nordland Art and Film School</p>
+						<p>2007-2008</p>
+					</li>
+				</ul>
 			</article>
 		</div>
 	</section>
@@ -77,6 +84,30 @@
 		font-size: 0.95rem;
 		text-transform: lowercase;
 		letter-spacing: 0.02em;
+	}
+
+	.cv-list {
+		list-style: none;
+		margin: 0;
+		padding: 0;
+		display: grid;
+		gap: 0.9rem;
+	}
+
+	.cv-list li {
+		padding-top: 0.75rem;
+		border-top: 1px solid rgba(117, 98, 68, 0.2);
+		display: grid;
+		gap: 0.2rem;
+	}
+
+	.cv-list li:first-child {
+		padding-top: 0;
+		border-top: 0;
+	}
+
+	.cv-title {
+		font-weight: 700;
 	}
 
 	@media (max-width: 760px) {
