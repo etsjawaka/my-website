@@ -57,6 +57,10 @@
 	$: cameraFov = isMobile ? 36 : 30;
 	$: minPolarAngle = isMobile ? 1.45 : 0.95;
 	$: maxPolarAngle = isMobile ? 1.45 : 2.15;
+	$: activeLabel =
+		labelIndex !== null && PLANET_NAV_ITEMS[labelIndex]
+			? PLANET_NAV_ITEMS[labelIndex].label.toLowerCase()
+			: 'none';
 </script>
 
 <svelte:window bind:innerWidth />
@@ -97,9 +101,11 @@
 			/>
 		</Canvas>
 
-		{#if labelIndex !== null}
-			<div class="term-label" aria-live="polite">&gt; {PLANET_NAV_ITEMS[labelIndex].label.toLowerCase()}</div>
-		{/if}
+		<div class="term-panel" aria-live="polite">
+			<div class="term-title">nav://planet</div>
+			<div class="term-line">&gt; hover: {activeLabel}</div>
+			<div class="term-line term-muted">&gt; index: {labelIndex ?? '-'} | armed: {mobileArmedIndex ?? '-'}</div>
+		</div>
 	</div>
 </section>
 
@@ -131,19 +137,43 @@
 		height: 100%;
 	}
 
-	.term-label {
+	.term-panel {
 		position: absolute;
-		bottom: 2.2rem;
-		left: 2rem;
-		z-index: 10;
+		bottom: 1.5rem;
+		left: 1.5rem;
+		z-index: 30;
 		pointer-events: none;
+		padding: 0.85rem 0.95rem;
+		border: 1px solid rgba(255, 255, 255, 0.2);
+		background: rgba(22, 20, 17, 0.56);
+		backdrop-filter: blur(2px);
+		box-shadow: 0 10px 26px rgba(0, 0, 0, 0.25);
+		border-radius: 8px;
+	}
+
+	.term-title {
 		font-family: 'Courier New', Courier, monospace;
-		font-size: clamp(1.4rem, 4vw, 2.6rem);
-		font-weight: 400;
-		color: rgba(80, 68, 50, 0.55);
+		font-size: 0.8rem;
+		font-weight: 700;
+		color: rgba(238, 225, 195, 0.9);
 		letter-spacing: 0.06em;
+		text-transform: uppercase;
+		margin-bottom: 0.35rem;
+	}
+
+	.term-line {
+		font-family: 'Courier New', Courier, monospace;
+		font-size: clamp(0.85rem, 2.2vw, 1rem);
+		font-weight: 600;
+		color: rgba(249, 236, 208, 0.98);
+		letter-spacing: 0.02em;
+		line-height: 1.35;
 		user-select: none;
 		transition: opacity 0.25s ease;
+	}
+
+	.term-muted {
+		color: rgba(224, 206, 171, 0.78);
 	}
 
 	@media (max-width: 680px) {
