@@ -15,7 +15,6 @@
 		Vector3
 	} from 'three';
 	import type { PlanetHotspot, PlanetNavItem } from '$lib/planet/navigation';
-	import { hoveredPlanetLabelIndex } from '$lib/planet/hover-store';
 
 	export let items: PlanetNavItem[] = [];
 	export let isMobile = false;
@@ -37,6 +36,7 @@
 	const desiredScale = new Vector3();
 	const baseScales = new SvelteMap<Object3D, Vector3>();
 	const childMaterials = new SvelteMap<Object3D, MeshStandardMaterial[]>();
+	let lastRenderedLabelIndex: number | null = null;
 
 	const parentWireMaterial = new MeshBasicMaterial({
 		color: '#050505',
@@ -205,17 +205,30 @@
 		return index >= 0 ? index : null;
 	}
 
+	function syncExternalHoverLabel(index: number | null) {
+		if (index === lastRenderedLabelIndex) return;
+		lastRenderedLabelIndex = index;
+
+		const labelEl = document.querySelector<HTMLElement>('[data-planet-hover-label]');
+		if (!labelEl) return;
+
+		labelEl.textContent = index !== null && items[index] ? items[index].label.toLowerCase() : '';
+	}
+
 	function handlePointerMove(event: PointerEvent) {
 		const idx = pickHoveredIndex(event);
 		hoveredIndex = idx;
+		syncExternalHoverLabel(idx);
 	}
 
 	function handlePointerDown(event: PointerEvent) {
 		const idx = pickHoveredIndex(event);
 		hoveredIndex = idx;
+		syncExternalHoverLabel(idx);
 	}
 	function handlePointerLeave() {
 		hoveredIndex = null;
+		syncExternalHoverLabel(null);
 	}
 
 	/**
@@ -227,10 +240,9 @@
 		} else {
 			const idx = pickHoveredIndex(event);
 			hoveredIndex = idx;
+			syncExternalHoverLabel(idx);
 		}
 	}
-
-	$: hoveredPlanetLabelIndex.set(hoveredIndex);
 
 	useTask(
 		(delta: number) => {
@@ -280,7 +292,7 @@
 
 		return () => {
 			mounted = false;
-			hoveredPlanetLabelIndex.set(null);
+			syncExternalHoverLabel(null);
 			if (dom) {
 				dom.removeEventListener('pointermove', handlePointerMove);
 				dom.removeEventListener('pointerdown', handlePointerDown);

@@ -4,7 +4,6 @@
 	import { OrbitControls } from '@threlte/extras';
 	import PlanetScene from '$lib/planet/PlanetScene.svelte';
 	import { PLANET_NAV_ITEMS } from '$lib/planet/navigation';
-	import { hoveredPlanetLabelIndex } from '$lib/planet/hover-store';
 
 	let hoveredIndex: number | null = null;
 	let mobileArmedIndex: number | null = null;
@@ -65,10 +64,6 @@
 	$: cameraFov = isMobile ? 36 : 30;
 	$: minPolarAngle = isMobile ? 1.45 : 0.95;
 	$: maxPolarAngle = isMobile ? 1.45 : 2.15;
-	$: activeLabel =
-		$hoveredPlanetLabelIndex !== null && PLANET_NAV_ITEMS[$hoveredPlanetLabelIndex]
-			? PLANET_NAV_ITEMS[$hoveredPlanetLabelIndex].label.toLowerCase()
-			: '';
 </script>
 
 <svelte:window bind:innerWidth />
@@ -115,9 +110,7 @@
 		</Canvas>
 
 		<div class="term-panel" aria-live="polite">
-			{#if $hoveredPlanetLabelIndex !== null}
-				<div class="term-line">{activeLabel}</div>
-			{/if}
+			<div class="term-line" data-planet-hover-label></div>
 		</div>
 
 		<!-- Large label overlay (removed, showing in box instead) -->
