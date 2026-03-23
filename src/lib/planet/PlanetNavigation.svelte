@@ -153,9 +153,9 @@
 		min-height: 0;
 		touch-action: none;
 		background:
-			radial-gradient(circle at 50% 14%, rgba(255, 255, 255, 0.88), rgba(255, 255, 255, 0) 36%),
-			radial-gradient(circle at 50% 54%, rgba(188, 174, 145, 0.12), rgba(188, 174, 145, 0) 52%),
-			linear-gradient(180deg, #efefeb 0%, #e6e3dd 100%);
+			radial-gradient(circle at 50% 14%, rgba(255, 255, 255, 0.94), rgba(255, 255, 255, 0) 38%),
+			radial-gradient(circle at 50% 54%, rgba(208, 194, 167, 0.12), rgba(208, 194, 167, 0) 54%),
+			linear-gradient(180deg, #f6f4ef 0%, #eeeadf 100%);
 		overflow: hidden;
 	}
 
@@ -195,9 +195,9 @@
 	@media (max-width: 680px) {
 		.canvas-wrap {
 			background:
-				radial-gradient(circle at 50% 12%, rgba(255, 255, 255, 0.94), rgba(255, 255, 255, 0) 38%),
-				radial-gradient(circle at 50% 52%, rgba(214, 201, 175, 0.18), rgba(214, 201, 175, 0) 56%),
-				linear-gradient(180deg, #f5f3ee 0%, #ebe6de 100%);
+				radial-gradient(circle at 50% 10%, rgba(255, 255, 255, 0.98), rgba(255, 255, 255, 0) 40%),
+				radial-gradient(circle at 50% 50%, rgba(226, 214, 188, 0.18), rgba(226, 214, 188, 0) 58%),
+				linear-gradient(180deg, #fbf9f4 0%, #f1ece3 100%);
 		}
 
 		.term-panel {
