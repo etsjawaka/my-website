@@ -206,16 +206,21 @@
 	}
 
 	function handlePointerMove(event: PointerEvent) {
-		hoveredIndex = pickHoveredIndex(event);
+		const idx = pickHoveredIndex(event);
+		console.log('[PlanetScene] pointermove -> pickHoveredIndex:', idx);
+		hoveredIndex = idx;
 		onHoverChange(hoveredIndex);
 	}
 
 	function handlePointerDown(event: PointerEvent) {
-		hoveredIndex = pickHoveredIndex(event);
+		const idx = pickHoveredIndex(event);
+		console.log('[PlanetScene] pointerdown -> pickHoveredIndex:', idx);
+		hoveredIndex = idx;
 		onHoverChange(hoveredIndex);
 	}
 
 	function handlePointerLeave() {
+		console.log('[PlanetScene] pointerleave');
 		hoveredIndex = null;
 		onHoverChange(null);
 	}
