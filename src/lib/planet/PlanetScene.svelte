@@ -23,6 +23,7 @@
 	export let loadError = '';
 	export let onHotspotsChange: (hotspots: PlanetHotspot[]) => void = () => {};
 	export let onHoverChange: (index: number | null) => void = () => {};
+	export let onPlanetReady: () => void = () => {};
 	let gltf: ThrelteGltf | null = null;
 	let mounted = false;
 	let planetRoot: Object3D | null = null;
@@ -296,6 +297,10 @@
 		dom.addEventListener('pointerdown', handlePointerDown);
 		dom.addEventListener('pointerleave', handlePointerLeave);
 		console.log('[PlanetScene onMount] Event listeners attached successfully');
+		
+		// Signal that component is ready
+		console.log('[PlanetScene onMount] Calling onPlanetReady');
+		onPlanetReady();
 
 		return () => {
 			mounted = false;

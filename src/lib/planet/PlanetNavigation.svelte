@@ -7,6 +7,7 @@
 
 	let hoveredIndex: number | null = null;
 	let labelIndex: number | null = null;
+	let planetReady = false;
 	let mobileArmedIndex: number | null = null;
 	let canvasWrapEl: HTMLDivElement;
 	let planetSceneRef: any;
@@ -115,11 +116,17 @@
 					labelIndex = idx;
 					console.log('[PlanetNav onHoverChange callback] set labelIndex to:', labelIndex);
 				}}
+				onPlanetReady={() => {
+					console.log('[PlanetNav] Planet is ready!');
+					planetReady = true;
+				}}
 			/>
 		</Canvas>
 
 		<div class="term-panel" aria-live="polite">
-			{#if labelIndex !== null}
+			{#if !planetReady}
+				<div class="term-line">loading...</div>
+			{:else if labelIndex !== null}
 				<div class="term-line">{activeLabel}</div>
 			{/if}
 		</div>
