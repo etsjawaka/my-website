@@ -25,24 +25,28 @@
 		pointerDownX = event.clientX;
 		pointerDownY = event.clientY;
 
-		if (planetSceneRef?.updateHoverFromEvent) {
-			planetSceneRef.updateHoverFromEvent(event, 'down');
+		const nextIndex = planetSceneRef?.updateHoverFromEvent
+			? planetSceneRef.updateHoverFromEvent(event, 'down')
+			: hoveredIndex;
+
+		if (typeof nextIndex === 'number' || nextIndex === null) {
+			hoveredIndex = nextIndex;
 		}
 
 		if (!isMobile) return;
 
-		if (hoveredIndex === null) {
+		if (nextIndex === null) {
 			mobileArmedIndex = null;
 			return;
 		}
 
-		if (mobileArmedIndex === hoveredIndex) {
+		if (mobileArmedIndex === nextIndex) {
 			mobileArmedIndex = null;
-			openHotspot(hoveredIndex);
+			openHotspot(nextIndex);
 			return;
 		}
 
-		mobileArmedIndex = hoveredIndex;
+		mobileArmedIndex = nextIndex;
 	}
 
 	function handlePointerUp(event: PointerEvent) {
@@ -53,7 +57,9 @@
 	}
 
 	function handlePointerLeave() {
-		hoveredIndex = null;
+		if (!isMobile) {
+			hoveredIndex = null;
+		}
 		if (planetSceneRef?.updateHoverFromEvent) {
 			planetSceneRef.updateHoverFromEvent(null, 'leave');
 		}
@@ -153,9 +159,9 @@
 		pointer-events: none;
 		padding: 0.85rem 0.95rem;
 		border: 1px solid rgba(255, 255, 255, 0.2);
-		background: rgba(22, 20, 17, 0.56);
+		background: rgba(54, 48, 39, 0.34);
 		backdrop-filter: blur(2px);
-		box-shadow: 0 10px 26px rgba(0, 0, 0, 0.25);
+		box-shadow: 0 10px 26px rgba(0, 0, 0, 0.16);
 		border-radius: 8px;
 		min-height: 1.5rem;
 	}
@@ -172,5 +178,9 @@
 	}
 
 	@media (max-width: 680px) {
+		.term-panel {
+			background: rgba(78, 70, 57, 0.24);
+			border-color: rgba(255, 255, 255, 0.26);
+		}
 	}
 </style>

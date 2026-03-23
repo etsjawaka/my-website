@@ -227,6 +227,7 @@
 		syncExternalHoverLabel(idx);
 	}
 	function handlePointerLeave() {
+		if (isMobile) return;
 		hoveredIndex = null;
 		syncExternalHoverLabel(null);
 	}
@@ -234,13 +235,19 @@
 	/**
 	 * Public method: Call from PlanetNavigation to do raycasting and update hover state
 	 */
-	export function updateHoverFromEvent(event: PointerEvent, eventType: 'move' | 'down' | 'leave') {
+	export function updateHoverFromEvent(
+		event: PointerEvent | null,
+		eventType: 'move' | 'down' | 'leave'
+	): number | null {
 		if (eventType === 'leave') {
 			handlePointerLeave();
+			return hoveredIndex;
 		} else {
+			if (!event) return hoveredIndex;
 			const idx = pickHoveredIndex(event);
 			hoveredIndex = idx;
 			syncExternalHoverLabel(idx);
+			return idx;
 		}
 	}
 
