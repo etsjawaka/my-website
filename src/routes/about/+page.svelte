@@ -35,6 +35,9 @@
 				<li>Metalwork</li>
 				<li>Tools repair</li>
 				<li>Metalart</li>
+				<li>3D drawing</li>
+				<li>CNC CAD</li>
+				<li>Print</li>
 			</ul>
 		</div>
 
