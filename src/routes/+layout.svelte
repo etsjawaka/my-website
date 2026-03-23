@@ -14,7 +14,7 @@
 
 <style>
 	:global(:root) {
-		--bg-color: #f4f1ea;
+		--bg-color: #faf8f3;
 		--text-color: #8a795d;
 		--accent: #8a795d;
 		color-scheme: light;
@@ -23,7 +23,7 @@
 	:global(body) {
 		margin: 0;
 		background:
-			radial-gradient(circle at top, rgba(255, 255, 255, 0.92), rgba(255, 255, 255, 0) 38%),
+			radial-gradient(circle at top, rgba(255, 255, 255, 0.98), rgba(255, 255, 255, 0) 46%),
 			var(--bg-color);
 		color: var(--text-color);
 		overflow-x: hidden;
