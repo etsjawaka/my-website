@@ -53,8 +53,10 @@
 	h1 {
 		margin: 0;
 		font-size: clamp(1.35rem, 3vw, 1.95rem);
-		letter-spacing: 0.04em;
+		font-weight: 600;
+		letter-spacing: 0.02em;
 		text-transform: lowercase;
+		color: rgba(88, 73, 46, 0.96);
 	}
 
 	p {
