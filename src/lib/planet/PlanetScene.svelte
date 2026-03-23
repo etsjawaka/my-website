@@ -207,22 +207,35 @@
 
 	function handlePointerMove(event: PointerEvent) {
 		const idx = pickHoveredIndex(event);
-		console.log('[PlanetScene] pointermove -> pickHoveredIndex:', idx);
+		console.log('[PlanetScene] handlePointerMove -> pickHoveredIndex:', idx);
 		hoveredIndex = idx;
 		onHoverChange(hoveredIndex);
 	}
 
 	function handlePointerDown(event: PointerEvent) {
 		const idx = pickHoveredIndex(event);
-		console.log('[PlanetScene] pointerdown -> pickHoveredIndex:', idx);
+		console.log('[PlanetScene] handlePointerDown -> pickHoveredIndex:', idx);
 		hoveredIndex = idx;
 		onHoverChange(hoveredIndex);
 	}
-
 	function handlePointerLeave() {
-		console.log('[PlanetScene] pointerleave');
+		console.log('[PlanetScene] handlePointerLeave');
 		hoveredIndex = null;
 		onHoverChange(null);
+	}
+
+	/**
+	 * Public method: Call from PlanetNavigation to do raycasting and update hover state
+	 */
+	export function updateHoverFromEvent(event: PointerEvent, eventType: 'move' | 'down' | 'leave') {
+		if (eventType === 'leave') {
+			handlePointerLeave();
+		} else {
+			const idx = pickHoveredIndex(event);
+			console.log(`[PlanetScene] updateHoverFromEvent(${eventType}) -> pickHoveredIndex:`, idx);
+			hoveredIndex = idx;
+			onHoverChange(hoveredIndex);
+		}
 	}
 
 	useTask(
@@ -265,15 +278,8 @@
 		resetHotspots();
 		loadModel();
 
-		dom.addEventListener('pointerdown', handlePointerDown);
-		dom.addEventListener('pointermove', handlePointerMove);
-		dom.addEventListener('pointerleave', handlePointerLeave);
-
 		return () => {
 			mounted = false;
-			dom.removeEventListener('pointerdown', handlePointerDown);
-			dom.removeEventListener('pointermove', handlePointerMove);
-			dom.removeEventListener('pointerleave', handlePointerLeave);
 			resetHotspots();
 		};
 	});
