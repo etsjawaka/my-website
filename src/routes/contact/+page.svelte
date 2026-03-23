@@ -12,15 +12,15 @@
 		<div class="card-grid">
 			<article class="card">
 				<h2>email</h2>
-				<p>your@email.com</p>
+				<p>post@ione.no</p>
 			</article>
 			<article class="card">
 				<h2>social</h2>
-				<p>@handle</p>
+				<p>@galaxiuschaos</p>
 			</article>
 			<article class="card">
 				<h2>location</h2>
-				<p>city, country</p>
+				<p>Sandve, Norway</p>
 			</article>
 		</div>
 	</section>
