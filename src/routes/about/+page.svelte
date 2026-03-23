@@ -37,7 +37,7 @@
 				<li>Metalart</li>
 				<li>3D drawing</li>
 				<li>CNC CAD</li>
-				<li>Print</li>
+				<li>3D print</li>
 			</ul>
 		</div>
 
