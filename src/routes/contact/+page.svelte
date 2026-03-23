@@ -4,10 +4,6 @@
 <main aria-label="Contact page">
 	<section class="page-panel">
 		<h1>contact</h1>
-		<p>
-			Add your preferred contact channels here. This block is ready for e-mail, social links,
-			booking info, and studio location text.
-		</p>
 
 		<div class="card-grid">
 			<article class="card">
