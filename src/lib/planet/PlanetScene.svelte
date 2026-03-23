@@ -234,7 +234,9 @@
 			const idx = pickHoveredIndex(event);
 			console.log(`[PlanetScene] updateHoverFromEvent(${eventType}) -> pickHoveredIndex:`, idx);
 			hoveredIndex = idx;
+			console.log('[PlanetScene] calling onHoverChange with:', hoveredIndex);
 			onHoverChange(hoveredIndex);
+			console.log('[PlanetScene] onHoverChange completed');
 		}
 	}
 

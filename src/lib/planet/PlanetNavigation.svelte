@@ -68,8 +68,8 @@
 	$: activeLabel =
 		labelIndex !== null && PLANET_NAV_ITEMS[labelIndex]
 			? PLANET_NAV_ITEMS[labelIndex].label.toLowerCase()
-			: 'none';
-	$: if (labelIndex !== null) console.log('[PlanetNav] labelIndex changed:', labelIndex);
+			: '';
+	$: console.log('[PlanetNav] labelIndex/activeLabel:', labelIndex, activeLabel);
 </script>
 
 <svelte:window bind:innerWidth />
@@ -80,7 +80,10 @@
 		class="canvas-wrap"
 		bind:this={canvasWrapEl}
 		on:pointerdown={handlePointerDown}
-		on:pointermove={(e) => planetSceneRef?.updateHoverFromEvent(e, 'move')}
+		on:pointermove={(e) => {
+			console.log('[PlanetNav] pointermove fired, has planetSceneRef:', !!planetSceneRef);
+			planetSceneRef?.updateHoverFromEvent(e, 'move');
+		}}
 		on:pointerup={handlePointerUp}
 		on:pointerleave={handlePointerLeave}
 	>
@@ -108,7 +111,11 @@
 				bind:hoveredIndex
 				bind:status
 				bind:loadError
-				onHoverChange={(idx) => { labelIndex = idx; }}
+				onHoverChange={(idx) => {
+					console.log('[PlanetNav onHoverChange callback] received idx:', idx);
+					labelIndex = idx;
+					console.log('[PlanetNav onHoverChange callback] set labelIndex to:', labelIndex);
+				}}
 			/>
 		</Canvas>
 
