@@ -39,6 +39,8 @@
 			radial-gradient(circle at top, rgba(255, 255, 255, 0.98), rgba(255, 255, 255, 0) 46%),
 			var(--bg-color);
 		color: var(--text-color);
+		font-family: 'Courier New', Courier, monospace;
+		line-height: 1.45;
 		overflow-x: hidden;
 		color-scheme: light;
 	}

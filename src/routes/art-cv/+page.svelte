@@ -39,16 +39,16 @@
 		background: var(--bg-color, #e8e8e5);
 		display: grid;
 		grid-template-rows: auto 1fr;
-		gap: 2rem;
-		padding: 4.5rem 1rem 2rem;
+		gap: 1.5rem;
+		padding: clamp(4.8rem, 8vw, 5.8rem) 1rem 2rem;
 	}
 
 	.page-panel {
 		width: min(920px, 100%);
 		justify-self: center;
 		display: grid;
-		gap: 1rem;
-		padding: 1.2rem;
+		gap: 0.9rem;
+		padding: clamp(1rem, 2.8vw, 1.35rem);
 		border: 1px solid rgba(117, 98, 68, 0.35);
 		border-radius: 18px;
 		background: rgba(255, 255, 255, 0.45);
@@ -99,7 +99,15 @@
 		border-top: 1px solid rgba(117, 98, 68, 0.2);
 		display: grid;
 		gap: 0.2rem;
+		opacity: 0;
+		transform: translateY(8px);
+		animation: rise-in 420ms ease forwards;
 	}
+
+	.cv-list li:nth-child(1) { animation-delay: 50ms; }
+	.cv-list li:nth-child(2) { animation-delay: 120ms; }
+	.cv-list li:nth-child(3) { animation-delay: 190ms; }
+	.cv-list li:nth-child(4) { animation-delay: 260ms; }
 
 	.cv-list li:first-child {
 		padding-top: 0;
@@ -110,9 +118,28 @@
 		font-weight: 700;
 	}
 
+	@keyframes rise-in {
+		from {
+			opacity: 0;
+			transform: translateY(8px);
+		}
+		to {
+			opacity: 1;
+			transform: translateY(0);
+		}
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.cv-list li {
+			animation: none;
+			opacity: 1;
+			transform: none;
+		}
+	}
+
 	@media (max-width: 760px) {
 		main {
-			padding-top: 1.6rem;
+			padding-top: 4.3rem;
 			gap: 1.25rem;
 		}
 
