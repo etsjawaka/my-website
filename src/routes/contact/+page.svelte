@@ -1,10 +1,7 @@
 <script lang="ts">
-	import { resolve } from '$app/paths';
 </script>
 
 <main aria-label="Contact page">
-	<a class="home-link" href={resolve('/')}>Mainpage</a>
-
 	<section class="page-panel">
 		<h1>contact</h1>
 		<p>
@@ -36,16 +33,7 @@
 		display: grid;
 		grid-template-rows: auto 1fr;
 		gap: 2rem;
-		padding: 2.25rem 1rem 2rem;
-	}
-
-	.home-link {
-		color: var(--text-color, #8a795d);
-		font-size: 1rem;
-		font-weight: 700;
-		text-decoration: underline;
-		text-underline-offset: 0.18em;
-		justify-self: center;
+		padding: 4.5rem 1rem 2rem;
 	}
 
 	.page-panel {

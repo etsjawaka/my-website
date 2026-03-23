@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import Reveal from '$lib/Reveal.svelte';
-	import { resolve } from '$app/paths';
 
 	let photos: string[] = [];
 	let loading = true;
@@ -23,8 +22,6 @@
 </script>
 
 <main aria-label="About page">
-	<a class="home-link" href={resolve('/')}>Mainpage</a>
-
 	<section class="about-panel">
 		<Reveal>
 			<h1>about</h1>
@@ -55,16 +52,7 @@
 		display: grid;
 		grid-template-rows: auto 1fr;
 		gap: 2rem;
-		padding: 2.25rem 0 2rem;
-	}
-
-	.home-link {
-		color: var(--text-color, #8a795d);
-		font-size: 1rem;
-		font-weight: 700;
-		text-decoration: underline;
-		text-underline-offset: 0.18em;
-		justify-self: center;
+		padding: 4.5rem 0 2rem;
 	}
 
 	.about-panel {

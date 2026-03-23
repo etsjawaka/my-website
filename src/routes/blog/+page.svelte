@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import { resolve } from '$app/paths';
 
 	type LatestShort = {
 		videoId: string;
@@ -26,8 +25,6 @@
 </script>
 
 <main aria-label="Blog page">
-	<a class="home-link" href={resolve('/')}>Mainpage</a>
-
 	<section class="blog-panel" aria-live="polite">
 		<h1>blog</h1>
 
@@ -59,16 +56,7 @@
 		display: grid;
 		grid-template-rows: auto 1fr;
 		gap: 2rem;
-		padding: 2.25rem 1rem 2rem;
-	}
-
-	.home-link {
-		color: var(--text-color, #8a795d);
-		font-size: 1rem;
-		font-weight: 700;
-		text-decoration: underline;
-		text-underline-offset: 0.18em;
-		justify-self: center;
+		padding: 4.5rem 1rem 2rem;
 	}
 
 	.blog-panel {
