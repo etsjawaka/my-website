@@ -29,6 +29,7 @@
 	let clickTargets: Object3D[] = [];
 	const loader = useGltf();
 	const { camera, dom, invalidate } = useThrelte();
+	console.log('[PlanetScene script load] useThrelte dom:', dom);
 	const worldPosition = new Vector3();
 	const modelCenter = new Vector3();
 	const modelBounds = new Box3();
@@ -206,6 +207,7 @@
 	}
 
 	function handlePointerMove(event: PointerEvent) {
+		console.log('[handlePointerMove] fired');
 		const idx = pickHoveredIndex(event);
 		console.log('[PlanetScene] handlePointerMove -> pickHoveredIndex:', idx);
 		hoveredIndex = idx;
@@ -213,12 +215,14 @@
 	}
 
 	function handlePointerDown(event: PointerEvent) {
+		console.log('[handlePointerDown] fired');
 		const idx = pickHoveredIndex(event);
 		console.log('[PlanetScene] handlePointerDown -> pickHoveredIndex:', idx);
 		hoveredIndex = idx;
 		onHoverChange(hoveredIndex);
 	}
 	function handlePointerLeave() {
+		console.log('[handlePointerLeave] fired');
 		console.log('[PlanetScene] handlePointerLeave');
 		hoveredIndex = null;
 		onHoverChange(null);
@@ -276,16 +280,22 @@
 	);
 
 	onMount(() => {
+		console.log('[PlanetScene onMount] Starting, dom:', dom);
 		mounted = true;
 		resetHotspots();
 		loadModel();
 
-		console.log('[PlanetScene onMount] Attaching event listeners to dom:', dom);
+		if (!dom) {
+			console.error('[PlanetScene onMount] dom is null or undefined!');
+			return () => {};
+		}
+
+		console.log('[PlanetScene onMount] Attaching event listeners to dom');
 		// Attach event listeners to the Threlte canvas element
 		dom.addEventListener('pointermove', handlePointerMove);
 		dom.addEventListener('pointerdown', handlePointerDown);
 		dom.addEventListener('pointerleave', handlePointerLeave);
-		console.log('[PlanetScene onMount] Event listeners attached');
+		console.log('[PlanetScene onMount] Event listeners attached successfully');
 
 		return () => {
 			mounted = false;
