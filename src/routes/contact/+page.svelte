@@ -12,7 +12,8 @@
 			</article>
 			<article class="card">
 				<h2>social</h2>
-				<p>@galaxiuschaos</p>
+				<p>YouTube: @galaxiuschaos</p>
+				<p>Instagram: @dobbel_smultring</p>
 			</article>
 			<article class="card">
 				<h2>location</h2>
