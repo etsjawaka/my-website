@@ -167,7 +167,7 @@
 
 	.term-panel {
 		position: absolute;
-		bottom: 1.5rem;
+		top: 1.25rem;
 		left: 1.5rem;
 		z-index: 30;
 		pointer-events: none;
@@ -201,7 +201,7 @@
 		.term-panel {
 			left: 1rem;
 			right: auto;
-			bottom: calc(1rem + env(safe-area-inset-bottom, 0px) + 3.75rem);
+			top: calc(0.85rem + env(safe-area-inset-top, 0px));
 			padding: 0.78rem 0.88rem;
 			background: rgba(248, 244, 236, 0.72);
 			border-color: rgba(177, 161, 131, 0.36);

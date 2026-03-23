@@ -8,6 +8,7 @@
 	<title>ione:forge</title>
 	<link rel="icon" href={favicon} />
 	<meta name="theme-color" content="#f7f4ee" />
+	<meta name="color-scheme" content="light" />
 </svelte:head>
 
 {@render children()}
@@ -20,6 +21,11 @@
 		color-scheme: light;
 	}
 
+	:global(html) {
+		background: #fffefb;
+		color-scheme: light;
+	}
+
 	:global(body) {
 		margin: 0;
 		background:
@@ -27,6 +33,7 @@
 			var(--bg-color);
 		color: var(--text-color);
 		overflow-x: hidden;
+		color-scheme: light;
 	}
 
 	:global(*) {
