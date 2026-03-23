@@ -80,9 +80,8 @@
 		class="canvas-wrap"
 		bind:this={canvasWrapEl}
 		on:pointerdown={handlePointerDown}
-		on:pointermove={(e) => {
-			console.log('[PlanetNav] pointermove fired, has planetSceneRef:', !!planetSceneRef);
-			planetSceneRef?.updateHoverFromEvent(e, 'move');
+		on:pointermove={() => {
+			// Events handled by PlanetScene directly
 		}}
 		on:pointerup={handlePointerUp}
 		on:pointerleave={handlePointerLeave}

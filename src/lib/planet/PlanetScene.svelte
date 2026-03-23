@@ -280,8 +280,19 @@
 		resetHotspots();
 		loadModel();
 
+		console.log('[PlanetScene onMount] Attaching event listeners to dom:', dom);
+		// Attach event listeners to the Threlte canvas element
+		dom.addEventListener('pointermove', handlePointerMove);
+		dom.addEventListener('pointerdown', handlePointerDown);
+		dom.addEventListener('pointerleave', handlePointerLeave);
+		console.log('[PlanetScene onMount] Event listeners attached');
+
 		return () => {
 			mounted = false;
+			console.log('[PlanetScene cleanup] Removing event listeners');
+			dom.removeEventListener('pointermove', handlePointerMove);
+			dom.removeEventListener('pointerdown', handlePointerDown);
+			dom.removeEventListener('pointerleave', handlePointerLeave);
 			resetHotspots();
 		};
 	});
