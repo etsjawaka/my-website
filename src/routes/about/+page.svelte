@@ -156,7 +156,7 @@
 	.photo-frame img {
 		width: 100%;
 		height: 100%;
-		object-fit: cover;
+		object-fit: contain;
 		display: block;
 		transition: transform 260ms ease;
 	}
