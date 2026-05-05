@@ -5,6 +5,7 @@
 		price: string;
 		image: string;
 		alt: string;
+		imageFit?: 'cover' | 'contain';
 	};
 
 	const products: Product[] = [
@@ -20,7 +21,8 @@
 			description: 'Handmade from preference.',
 			price: 'From 4000 NOK',
 			image: '/products/øks.jpg',
-			alt: 'Øks handmade product'
+			alt: 'Øks handmade product',
+			imageFit: 'contain'
 		}
 	];
 </script>
@@ -33,7 +35,12 @@
 		<div class="product-grid">
 			{#each products as product}
 				<article class="product-card">
-					<img src={product.image} alt={product.alt} loading="lazy" />
+					<img
+						src={product.image}
+						alt={product.alt}
+						loading="lazy"
+						class:fit-contain={product.imageFit === 'contain'}
+					/>
 					<h2>{product.name}</h2>
 					<p>{product.description}</p>
 					<span class="price">{product.price}</span>
@@ -106,8 +113,14 @@
 		width: 100%;
 		aspect-ratio: 4 / 3;
 		object-fit: cover;
+		object-position: center;
 		border-radius: 10px;
 		border: 1px solid rgba(117, 98, 68, 0.22);
+	}
+
+	.product-card img.fit-contain {
+		object-fit: contain;
+		background: rgba(255, 255, 255, 0.65);
 	}
 
 	h2 {
