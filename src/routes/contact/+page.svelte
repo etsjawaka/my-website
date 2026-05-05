@@ -1,4 +1,31 @@
 <script lang="ts">
+	import { page } from '$app/state';
+
+	const emailTarget = 'post@ione.no';
+
+	let name = $state('');
+	let replyEmail = $state('');
+	let subject = $state(page.url.searchParams.get('subject') ?? '');
+	let message = $state(page.url.searchParams.get('message') ?? '');
+
+	$effect(() => {
+		subject = page.url.searchParams.get('subject') ?? '';
+		message = page.url.searchParams.get('message') ?? '';
+	});
+
+	function submitContactForm(event: SubmitEvent) {
+		event.preventDefault();
+
+		const body = [
+			`Name: ${name.trim() || 'Not provided'}`,
+			`Email: ${replyEmail.trim() || 'Not provided'}`,
+			'',
+			message.trim()
+		].join('\n');
+
+		const mailtoHref = `mailto:${emailTarget}?subject=${encodeURIComponent(subject.trim())}&body=${encodeURIComponent(body)}`;
+		window.location.href = mailtoHref;
+	}
 </script>
 
 <main aria-label="Contact page">
@@ -28,6 +55,28 @@
 			<article class="card">
 				<h2>location</h2>
 				<p>Sandve, Norway</p>
+			</article>
+			<article class="card contact-form-card">
+				<h2>buy request</h2>
+				<form class="contact-form" onsubmit={submitContactForm}>
+					<label>
+						Your name
+						<input type="text" name="name" bind:value={name} autocomplete="name" />
+					</label>
+					<label>
+						Your email
+						<input type="email" name="replyEmail" bind:value={replyEmail} autocomplete="email" />
+					</label>
+					<label>
+						Subject
+						<input type="text" name="subject" bind:value={subject} required />
+					</label>
+					<label>
+						Message
+						<textarea name="body" rows="5" bind:value={message} required></textarea>
+					</label>
+					<button type="submit">Send to post@ione.no</button>
+				</form>
 			</article>
 		</div>
 	</section>
@@ -71,7 +120,7 @@
 
 	.card-grid {
 		display: grid;
-		grid-template-columns: repeat(3, minmax(0, 1fr));
+		grid-template-columns: repeat(2, minmax(0, 1fr));
 		gap: 0.8rem;
 	}
 
@@ -88,6 +137,11 @@
 	.card:nth-child(1) { animation-delay: 60ms; }
 	.card:nth-child(2) { animation-delay: 130ms; }
 	.card:nth-child(3) { animation-delay: 200ms; }
+	.card:nth-child(4) { animation-delay: 270ms; }
+
+	.contact-form-card {
+		grid-column: 1 / -1;
+	}
 
 	h2 {
 		margin: 0 0 0.3rem;
@@ -106,6 +160,48 @@
 	a:hover {
 		color: rgba(63, 51, 32, 0.98);
 		border-color: rgba(63, 51, 32, 0.7);
+	}
+
+	.contact-form {
+		display: grid;
+		gap: 0.6rem;
+	}
+
+	label {
+		display: grid;
+		gap: 0.3rem;
+		font-size: 0.9rem;
+	}
+
+	input,
+	textarea {
+		width: 100%;
+		font: inherit;
+		color: rgba(44, 37, 25, 0.95);
+		padding: 0.55rem 0.65rem;
+		border-radius: 10px;
+		border: 1px solid rgba(117, 98, 68, 0.35);
+		background: rgba(255, 255, 255, 0.75);
+	}
+
+	textarea {
+		resize: vertical;
+	}
+
+	button {
+		width: fit-content;
+		padding: 0.48rem 0.75rem;
+		border-radius: 999px;
+		border: 1px solid rgba(88, 73, 46, 0.5);
+		background: rgba(88, 73, 46, 0.1);
+		color: rgba(63, 51, 32, 0.98);
+		font: inherit;
+		font-weight: 700;
+		cursor: pointer;
+	}
+
+	button:hover {
+		background: rgba(88, 73, 46, 0.2);
 	}
 
 	@keyframes card-rise {

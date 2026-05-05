@@ -1,29 +1,52 @@
 <script lang="ts">
+	type Product = {
+		name: string;
+		description: string;
+		price: string;
+		image: string;
+		alt: string;
+	};
+
+	const products: Product[] = [
+		{
+			name: 'stemjern',
+			description: 'Handmade from preference.',
+			price: 'From 500 NOK',
+			image: '/products/stemjern.jpg',
+			alt: 'Stemjern handmade product'
+		},
+		{
+			name: 'øks',
+			description: 'Handmade from preference.',
+			price: 'From 4000 NOK',
+			image: '/products/øks.jpg',
+			alt: 'Øks handmade product'
+		}
+	];
 </script>
 
 <main aria-label="Products page">
 	<section class="page-panel">
 		<h1>products</h1>
-		<p>
-			Populate this area with your catalog, pricing, release notes, and external shop links.
-		</p>
+		<p>Handmade pieces. Prices are starting prices and can vary by finish and details.</p>
 
 		<div class="product-grid">
-			<article class="product-card">
-				<h2>piece title</h2>
-				<p>Material, dimensions, year.</p>
-				<span class="placeholder-link">View details</span>
-			</article>
-			<article class="product-card">
-				<h2>piece title</h2>
-				<p>Material, dimensions, year.</p>
-				<span class="placeholder-link">View details</span>
-			</article>
-			<article class="product-card">
-				<h2>piece title</h2>
-				<p>Material, dimensions, year.</p>
-				<span class="placeholder-link">View details</span>
-			</article>
+			{#each products as product}
+				<article class="product-card">
+					<img src={product.image} alt={product.alt} loading="lazy" />
+					<h2>{product.name}</h2>
+					<p>{product.description}</p>
+					<span class="price">{product.price}</span>
+					<a
+						class="buy-button"
+						href={
+							`/contact?subject=${encodeURIComponent(`Order request: ${product.name}`)}&message=${encodeURIComponent(`Hi, I want to buy ${product.name}. Price: ${product.price}.`)}`
+						}
+					>
+						Buy
+					</a>
+				</article>
+			{/each}
 		</div>
 	</section>
 </main>
@@ -66,7 +89,7 @@
 
 	.product-grid {
 		display: grid;
-		grid-template-columns: repeat(3, minmax(0, 1fr));
+		grid-template-columns: repeat(2, minmax(0, 1fr));
 		gap: 0.8rem;
 	}
 
@@ -79,6 +102,14 @@
 		gap: 0.35rem;
 	}
 
+	.product-card img {
+		width: 100%;
+		aspect-ratio: 4 / 3;
+		object-fit: cover;
+		border-radius: 10px;
+		border: 1px solid rgba(117, 98, 68, 0.22);
+	}
+
 	h2 {
 		margin: 0;
 		font-size: 0.95rem;
@@ -86,12 +117,28 @@
 		letter-spacing: 0.02em;
 	}
 
-	.placeholder-link {
+	.price {
 		width: fit-content;
-		color: var(--text-color, #8a795d);
+		color: rgba(88, 73, 46, 0.96);
 		font-weight: 700;
-		text-decoration: underline;
-		text-underline-offset: 0.18em;
+	}
+
+	.buy-button {
+		width: fit-content;
+		padding: 0.42rem 0.68rem;
+		border-radius: 999px;
+		border: 1px solid rgba(88, 73, 46, 0.5);
+		background: rgba(88, 73, 46, 0.08);
+		color: rgba(63, 51, 32, 0.98);
+		font-size: 0.85rem;
+		font-weight: 700;
+		text-decoration: none;
+		transition: background-color 150ms ease, transform 150ms ease;
+	}
+
+	.buy-button:hover {
+		background: rgba(88, 73, 46, 0.16);
+		transform: translateY(-1px);
 	}
 
 	@media (max-width: 900px) {
