@@ -242,13 +242,13 @@
 		user-select: none;
 	}
 
-	/* Both arrows point clockwise; the rings turn that way at different speeds. */
+	/* The outer arrow points clockwise, the inner one counter-clockwise; each ring turns the way its arrow points. */
 	.ring.outer {
 		animation: spin 140s linear infinite;
 	}
 
 	.ring.inner {
-		animation: spin 90s linear infinite;
+		animation: spin 90s linear infinite reverse;
 	}
 
 	@keyframes spin {
