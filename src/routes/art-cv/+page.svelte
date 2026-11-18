@@ -1,152 +1,119 @@
-<script lang="ts">
-</script>
+<svelte:head>
+	<title>cv · ione</title>
+</svelte:head>
 
-<main aria-label="CV page">
-	<section class="page-panel">
-		<h1>cv</h1>
-		<p>Education</p>
+<main class="page" aria-label="CV page">
+	<header>
+		<h1 class="page-title">cv</h1>
+		<p class="lede">Espen Tangen Samuelsen · artist · Sandve, Norway</p>
+	</header>
 
-		<div class="timeline">
-			<article class="entry">
-				<h2>education</h2>
-				<ul class="cv-list">
-					<li>
-						<p class="cv-title">Masters Degree, Oslo National Academy of the Arts</p>
-						<p>Metal Arts and Digital Form</p>
-						<p>2009-2014</p>
-					</li>
-					<li>
-						<p class="cv-title">Strykejernet Art School, Oslo</p>
-						<p>2008-2009</p>
-					</li>
-					<li>
-						<p class="cv-title">Art Students League of New York</p>
-						<p>2008</p>
-					</li>
-					<li>
-						<p class="cv-title">Nordland Art and Film School</p>
-						<p>2007-2008</p>
-					</li>
-				</ul>
-			</article>
-		</div>
+	<section>
+		<h2 class="section-title">exhibitions</h2>
+		<ul class="list">
+			<li>
+				<span class="year">2021</span>
+				<span><em>Dark Woo</em>, Sandve, Karmøy. With Matej Skoberne (Slovenia)</span>
+			</li>
+			<li>
+				<span class="year">2014</span>
+				<span
+					><em>Neseblod</em>, Neseblod Records (the former Helvete shop), Oslo. Solo exhibition,
+					paintings</span
+				>
+			</li>
+			<li>
+				<span class="year">2014</span>
+				<span><em>Knock Knock</em>, Norsk Billedhuggerforening, Tøyen, Oslo</span>
+			</li>
+			<li>
+				<span class="year">2014</span>
+				<span>Master's degree show, Oslo National Academy of the Arts (KHiO)</span>
+			</li>
+			<li>
+				<span class="year">2013</span>
+				<span
+					><em>Svingninger: En tynn forbindelse til Spitsbergen</em>, Telemuseet, Norwegian Museum of
+					Science and Technology, Oslo. Grant exhibition with Telenor Kulturarv and Prof. Trond
+					Mikkelsen, marking 100 years of radiotelegraphy on Svalbard</span
+				>
+			</li>
+			<li>
+				<span class="year">2012</span>
+				<span>Bachelor's degree show, KHiO</span>
+			</li>
+			<li>
+				<span class="year">2008</span>
+				<span
+					><em>Agent Orange & the guerilla genes</em>, Galleri Brenneriet (Strykejernet Kunstskole),
+					Oslo. Group show with Yvonne Hetlevik and Daniel Rønning Stokkan</span
+				>
+			</li>
+			<li>
+				<span class="year">2006</span>
+				<span>Cafe Oliven, Son. Solo exhibition, paintings</span>
+			</li>
+		</ul>
 	</section>
+
+	<section>
+		<h2 class="section-title">grants & residencies</h2>
+		<ul class="list">
+			<li>
+				<span class="year">2013</span>
+				<span
+					>Svalbard grant, Telenor Kulturarv, for the 100th anniversary of radiotelegraphy. Three
+					months in Longyearbyen preparing <em>Svingninger</em></span
+				>
+			</li>
+		</ul>
+	</section>
+
+	<section>
+		<h2 class="section-title">education</h2>
+		<ul class="list">
+			<li>
+				<span class="year">2012–2014</span>
+				<span
+					>MA Fine Art, digital form (3D printing, CNC machining, 3D modelling). Oslo National Academy
+					of the Arts (KHiO)</span
+				>
+			</li>
+			<li>
+				<span class="year">2009–2012</span>
+				<span
+					>BA Fine Art, metal and jewellery art (blacksmithing, welding, casting). KHiO</span
+				>
+			</li>
+			<li>
+				<span class="year">2008–2009</span>
+				<span>Strykejernet Art School, Oslo. Painting and sculpture</span>
+			</li>
+			<li>
+				<span class="year">2008</span>
+				<span>Art Students League, New York. Anatomical drawing with Frank Porcu</span>
+			</li>
+			<li>
+				<span class="year">2007–2008</span>
+				<span>Nordland Art and Film School, Kabelvåg</span>
+			</li>
+		</ul>
+	</section>
+
+	<section>
+		<h2 class="section-title">skills</h2>
+		<p class="skills">
+			Blacksmithing · welding · metal casting · painting · drawing · CAD · CNC machining · 3D printing
+			· Blender · work at heights and from lifts
+		</p>
+	</section>
+
+	<p><a href="/climbing">climbing experience →</a></p>
 </main>
 
 <style>
-	main {
-		min-height: 100vh;
-		background: var(--bg-color, #e8e8e5);
-		display: grid;
-		grid-template-rows: auto 1fr;
-		gap: 1.5rem;
-		padding: clamp(4.8rem, 8vw, 5.8rem) 1rem 2rem;
-	}
-
-	.page-panel {
-		width: min(920px, 100%);
-		justify-self: center;
-		display: grid;
-		gap: 0.9rem;
-		padding: clamp(1rem, 2.8vw, 1.35rem);
-		border: 1px solid rgba(117, 98, 68, 0.35);
-		border-radius: 18px;
-		background: rgba(255, 255, 255, 0.45);
-		box-shadow: 0 10px 24px rgba(44, 37, 25, 0.08);
-	}
-
-	h1 {
+	.skills {
 		margin: 0;
-		font-size: clamp(1.35rem, 3vw, 1.95rem);
-		font-weight: 600;
-		letter-spacing: 0.02em;
-		text-transform: lowercase;
-		color: rgba(88, 73, 46, 0.96);
-	}
-
-	p {
-		margin: 0;
-		line-height: 1.5;
-	}
-
-	.timeline {
-		display: grid;
-		gap: 0.75rem;
-	}
-
-	.entry {
-		padding: 0.85rem;
-		border-radius: 12px;
-		border: 1px solid rgba(117, 98, 68, 0.25);
-		background: rgba(248, 246, 241, 0.72);
-	}
-
-	h2 {
-		margin: 0 0 0.3rem;
-		font-size: 0.95rem;
-		text-transform: lowercase;
-		letter-spacing: 0.02em;
-	}
-
-	.cv-list {
-		list-style: none;
-		margin: 0;
-		padding: 0;
-		display: grid;
-		gap: 0.9rem;
-	}
-
-	.cv-list li {
-		padding-top: 0.75rem;
-		border-top: 1px solid rgba(117, 98, 68, 0.2);
-		display: grid;
-		gap: 0.2rem;
-		opacity: 0;
-		transform: translateY(8px);
-		animation: rise-in 420ms ease forwards;
-	}
-
-	.cv-list li:nth-child(1) { animation-delay: 50ms; }
-	.cv-list li:nth-child(2) { animation-delay: 120ms; }
-	.cv-list li:nth-child(3) { animation-delay: 190ms; }
-	.cv-list li:nth-child(4) { animation-delay: 260ms; }
-
-	.cv-list li:first-child {
-		padding-top: 0;
-		border-top: 0;
-	}
-
-	.cv-title {
-		font-weight: 700;
-	}
-
-	@keyframes rise-in {
-		from {
-			opacity: 0;
-			transform: translateY(8px);
-		}
-		to {
-			opacity: 1;
-			transform: translateY(0);
-		}
-	}
-
-	@media (prefers-reduced-motion: reduce) {
-		.cv-list li {
-			animation: none;
-			opacity: 1;
-			transform: none;
-		}
-	}
-
-	@media (max-width: 760px) {
-		main {
-			padding-top: 4.3rem;
-			gap: 1.25rem;
-		}
-
-		.page-panel {
-			padding: 0.95rem;
-		}
+		max-width: 70ch;
 	}
 </style>

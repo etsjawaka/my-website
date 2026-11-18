@@ -7,22 +7,12 @@
 
 	let hoveredIndex: number | null = null;
 	let mobileArmedIndex: number | null = null;
-	let canvasWrapEl: HTMLDivElement;
 	let planetSceneRef: any;
 	let pointerDownX = 0;
 	let pointerDownY = 0;
 	let innerWidth = 1200;
 	let status = '';
 	let loadError = '';
-
-	function setPanelLabel(index: number | null) {
-		const labelEl = document.querySelector<HTMLElement>('[data-planet-hover-label]');
-		if (!labelEl) return;
-
-		labelEl.textContent = index !== null && PLANET_NAV_ITEMS[index]
-			? PLANET_NAV_ITEMS[index].label.toLowerCase()
-			: '';
-	}
 
 	function openHotspot(index: number) {
 		const item = PLANET_NAV_ITEMS[index];
@@ -42,12 +32,9 @@
 			hoveredIndex = nextIndex;
 		}
 
-		if (isMobile) {
-			setPanelLabel(nextIndex);
-		}
-
 		if (!isMobile) return;
 
+		// On touch screens the first tap shows the big label, the second tap opens the page.
 		if (nextIndex === null) {
 			mobileArmedIndex = null;
 			return;
@@ -65,18 +52,23 @@
 	function handlePointerUp(event: PointerEvent) {
 		const moved = Math.hypot(event.clientX - pointerDownX, event.clientY - pointerDownY);
 		if (moved > 16) return;
-		// Desktop only: mobile navigation is handled via handleChildTap
 		if (!isMobile && hoveredIndex !== null) openHotspot(hoveredIndex);
 	}
 
 	function handlePointerLeave() {
-		if (!isMobile) {
-			hoveredIndex = null;
-			setPanelLabel(null);
-		}
+		if (!isMobile) hoveredIndex = null;
 		if (planetSceneRef?.updateHoverFromEvent) {
 			planetSceneRef.updateHoverFromEvent(null, 'leave');
 		}
+	}
+
+	function menuEnter(index: number) {
+		hoveredIndex = index;
+	}
+
+	function menuLeave() {
+		hoveredIndex = null;
+		mobileArmedIndex = null;
 	}
 
 	$: isMobile = innerWidth <= 680;
@@ -84,15 +76,21 @@
 	$: cameraFov = isMobile ? 36 : 30;
 	$: minPolarAngle = isMobile ? 1.45 : 0.95;
 	$: maxPolarAngle = isMobile ? 1.45 : 2.15;
+	$: activeItem = hoveredIndex !== null ? (PLANET_NAV_ITEMS[hoveredIndex] ?? null) : null;
 </script>
 
 <svelte:window bind:innerWidth />
 
 <section class="planet-shell">
+	<header class="identity">
+		<h1>Espen Tangen Samuelsen</h1>
+		<p>artist · smith · climbing walls</p>
+	</header>
+
 	<!-- svelte-ignore a11y_no_static_element_interactions -->
 	<div
 		class="canvas-wrap"
-		bind:this={canvasWrapEl}
+		class:has-active={activeItem !== null}
 		on:pointerdown={handlePointerDown}
 		on:pointermove={(event) => {
 			if (planetSceneRef?.updateHoverFromEvent) {
@@ -102,6 +100,25 @@
 		on:pointerup={handlePointerUp}
 		on:pointerleave={handlePointerLeave}
 	>
+		<!-- The logo sits behind the planet; its two rings turn slowly like the arrows suggest. -->
+		<div class="logo-backdrop" aria-hidden="true">
+			<img class="ring outer" src="/logo-outer.png" alt="" />
+			<img class="ring inner" src="/logo-inner.png" alt="" />
+			<img class="ring center" src="/logo-center.png" alt="" />
+		</div>
+
+		<div class="big-label" aria-live="polite">
+			{#if activeItem}
+				{#key activeItem.href}
+					<p class="big-word">{activeItem.label.toLowerCase()}</p>
+					<p class="big-desc">{activeItem.description}</p>
+					{#if isMobile}
+						<p class="big-hint">tap again to open</p>
+					{/if}
+				{/key}
+			{/if}
+		</div>
+
 		<Canvas dpr={isMobile ? 1.2 : 1.5} shadows={false} colorManagementEnabled>
 			<T.PerspectiveCamera makeDefault position={[0, 0.1, cameraDistance]} fov={cameraFov}>
 				<OrbitControls
@@ -110,8 +127,8 @@
 					enableZoom={false}
 					minDistance={cameraDistance}
 					maxDistance={cameraDistance}
-					minPolarAngle={minPolarAngle}
-					maxPolarAngle={maxPolarAngle}
+					{minPolarAngle}
+					{maxPolarAngle}
 				/>
 			</T.PerspectiveCamera>
 
@@ -122,28 +139,59 @@
 			<PlanetScene
 				bind:this={planetSceneRef}
 				items={PLANET_NAV_ITEMS}
-				isMobile={isMobile}
+				{isMobile}
 				bind:hoveredIndex
 				bind:status
 				bind:loadError
 			/>
 		</Canvas>
-
-		<div class="term-panel" aria-live="polite">
-			<div class="term-line" data-planet-hover-label></div>
-		</div>
-
-		<!-- Large label overlay (removed, showing in box instead) -->
 	</div>
+
+	<nav class="text-menu" aria-label="Main menu">
+		{#each PLANET_NAV_ITEMS as item, index (item.href)}
+			<a
+				href={item.href}
+				class:active={hoveredIndex === index}
+				on:mouseenter={() => menuEnter(index)}
+				on:mouseleave={menuLeave}
+				on:focus={() => menuEnter(index)}
+				on:blur={menuLeave}>{item.label.toLowerCase()}</a
+			>
+		{/each}
+	</nav>
 </section>
 
 <style>
 	.planet-shell {
+		position: relative;
 		height: 100dvh;
 		min-height: 100vh;
 		overflow: hidden;
 		display: flex;
 		flex-direction: column;
+		background: #fff;
+		color: #111;
+	}
+
+	.identity {
+		position: absolute;
+		top: 1.4rem;
+		left: 1.6rem;
+		z-index: 30;
+		pointer-events: none;
+	}
+
+	.identity h1 {
+		margin: 0;
+		font-size: clamp(0.95rem, 2vw, 1.15rem);
+		font-weight: 700;
+		letter-spacing: 0.04em;
+	}
+
+	.identity p {
+		margin: 0.2rem 0 0;
+		font-size: 0.85rem;
+		color: #555;
 	}
 
 	.canvas-wrap {
@@ -152,65 +200,161 @@
 		flex: 1 1 0;
 		min-height: 0;
 		touch-action: none;
-		background:
-			radial-gradient(circle at 50% 10%, rgba(255, 255, 255, 0.99), rgba(255, 255, 255, 0) 46%),
-			radial-gradient(circle at 50% 60%, rgba(236, 227, 210, 0.1), rgba(236, 227, 210, 0) 62%),
-			linear-gradient(180deg, #fcfaf5 0%, #f5f1e8 100%);
 		overflow: hidden;
+		cursor: grab;
+	}
+
+	.canvas-wrap.has-active {
+		cursor: pointer;
 	}
 
 	.canvas-wrap :global(canvas) {
+		position: relative;
+		z-index: 2;
 		display: block;
 		width: 100%;
 		height: 100%;
 	}
 
-	.term-panel {
+	/* ---- logo behind the planet ---- */
+	.logo-backdrop {
 		position: absolute;
-		top: 1.25rem;
-		left: 1.5rem;
-		z-index: 30;
+		z-index: 0;
+		left: 50%;
+		top: 50%;
+		width: min(92vmin, 880px);
+		aspect-ratio: 1;
+		transform: translate(-50%, -50%);
+		opacity: 0.11;
 		pointer-events: none;
-		padding: 0.85rem 0.95rem;
-		border: 1px solid rgba(255, 255, 255, 0.34);
-		background: rgba(244, 239, 230, 0.54);
-		backdrop-filter: blur(2px);
-		box-shadow: 0 10px 26px rgba(108, 95, 73, 0.12);
-		border-radius: 8px;
-		min-height: 1.5rem;
-		min-width: 8.5rem;
+		transition: opacity 400ms ease;
 	}
 
-	.term-line {
-		font-family: 'Courier New', Courier, monospace;
-		font-size: clamp(0.95rem, 2.5vw, 1.2rem);
-		font-weight: 600;
-		color: rgba(88, 73, 46, 0.96);
-		letter-spacing: 0.02em;
-		line-height: 1.35;
+	.has-active .logo-backdrop {
+		opacity: 0.05;
+	}
+
+	.ring {
+		position: absolute;
+		inset: 0;
+		width: 100%;
+		height: 100%;
 		user-select: none;
-		transition: opacity 0.25s ease;
+	}
+
+	/* Both arrows point clockwise; the rings turn that way at different speeds. */
+	.ring.outer {
+		animation: spin 140s linear infinite;
+	}
+
+	.ring.inner {
+		animation: spin 90s linear infinite;
+	}
+
+	@keyframes spin {
+		to {
+			transform: rotate(360deg);
+		}
+	}
+
+	/* ---- big hover text ---- */
+	.big-label {
+		position: absolute;
+		z-index: 1;
+		left: clamp(1rem, 4vw, 3.5rem);
+		bottom: clamp(1rem, 4vh, 2.5rem);
+		pointer-events: none;
+		max-width: calc(100% - 2rem);
+	}
+
+	.big-word {
+		margin: 0;
+		font-size: clamp(3.4rem, 13vw, 11rem);
+		font-weight: 700;
+		line-height: 0.9;
+		letter-spacing: -0.04em;
+		color: #111;
+		animation: label-in 260ms ease both;
+	}
+
+	.big-desc {
+		margin: 0.6rem 0 0;
+		font-size: clamp(0.95rem, 1.8vw, 1.25rem);
+		color: #333;
+		animation: label-in 320ms ease 60ms both;
+	}
+
+	.big-hint {
+		margin: 0.35rem 0 0;
+		font-size: 0.8rem;
+		color: #777;
+	}
+
+	@keyframes label-in {
+		from {
+			opacity: 0;
+			transform: translateY(12px);
+		}
+		to {
+			opacity: 1;
+			transform: none;
+		}
+	}
+
+	/* ---- plain text menu ---- */
+	.text-menu {
+		position: relative;
+		z-index: 30;
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: center;
+		gap: 0.4rem 1.6rem;
+		padding: 0.9rem 1rem calc(1.1rem + env(safe-area-inset-bottom, 0px));
+		border-top: 1px solid #111;
+		background: #fff;
+	}
+
+	.text-menu a {
+		color: #111;
+		text-decoration: none;
+		font-size: 1rem;
+		letter-spacing: 0.04em;
+		padding: 0.15rem 0.1rem;
+		border-bottom: 1px solid transparent;
+	}
+
+	.text-menu a:hover,
+	.text-menu a:focus-visible,
+	.text-menu a.active {
+		border-bottom-color: #111;
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.ring.outer,
+		.ring.inner,
+		.big-word,
+		.big-desc {
+			animation: none;
+		}
 	}
 
 	@media (max-width: 680px) {
-		.canvas-wrap {
-			background:
-				linear-gradient(180deg, #fffdf9 0%, #f8f3ea 100%);
-		}
-
-		.term-panel {
+		.identity {
 			left: 1rem;
-			right: auto;
-			top: calc(0.85rem + env(safe-area-inset-top, 0px));
-			padding: 0.78rem 0.88rem;
-			background: rgba(248, 244, 236, 0.72);
-			border-color: rgba(177, 161, 131, 0.36);
-			min-width: 7.5rem;
+			top: calc(1rem + env(safe-area-inset-top, 0px));
 		}
 
-		.term-line {
-			font-size: 1rem;
-			color: rgba(87, 73, 50, 0.98);
+		.logo-backdrop {
+			width: 118vmin;
+		}
+
+		.big-label {
+			left: 1rem;
+			bottom: 0.8rem;
+		}
+
+		.text-menu {
+			gap: 0.4rem 1.1rem;
 		}
 	}
 </style>

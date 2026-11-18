@@ -37,6 +37,12 @@
 	const baseScales = new SvelteMap<Object3D, Vector3>();
 	const childMaterials = new SvelteMap<Object3D, MeshStandardMaterial[]>();
 	let lastRenderedLabelIndex: number | null = null;
+	let elapsed = 0;
+
+	// Nodes are solid enough to read as buttons; the hovered one goes fully black and grows.
+	const NODE_OPACITY = 0.62;
+	const NODE_OPACITY_ACTIVE = 0.96;
+	const NODE_SCALE_ACTIVE = 1.28;
 
 	const parentWireMaterial = new MeshBasicMaterial({
 		color: '#050505',
@@ -72,13 +78,13 @@
 				if (!(object instanceof Mesh)) return;
 
 				const material = new MeshStandardMaterial({
-					color: '#8a795d',
-					emissive: '#8a795d',
-					emissiveIntensity: 0.2,
+					color: '#111111',
+					emissive: '#000000',
+					emissiveIntensity: 0,
 					transparent: true,
-					opacity: 0.07,
-					metalness: 0,
-					roughness: 0.35,
+					opacity: NODE_OPACITY,
+					metalness: 0.1,
+					roughness: 0.55,
 					depthWrite: false
 				});
 
@@ -262,20 +268,28 @@
 				planetRoot.rotation.z += delta * 0.022;
 			}
 
+			elapsed += delta;
+
 			clickTargets.forEach((target, index) => {
 				const baseScale = baseScales.get(target);
 				if (!baseScale) return;
 
-				desiredScale.copy(baseScale).multiplyScalar(index === hoveredIndex ? 1.16 : 1);
+				const isActive = index === hoveredIndex;
+				// A slow, staggered "breathing" pulse hints that the nodes can be pressed.
+				const pulse = hoveredIndex === null ? 1 + Math.sin(elapsed * 1.6 + index * 1.3) * 0.05 : 1;
+
+				desiredScale.copy(baseScale).multiplyScalar(isActive ? NODE_SCALE_ACTIVE : pulse);
 				target.scale.lerp(desiredScale, 0.14);
 
 				const materials = childMaterials.get(target) || [];
-				const targetOpacity = index === hoveredIndex ? 0.2 : 0.07;
-				const targetGlow = index === hoveredIndex ? 0.58 : 0.2;
+				const targetOpacity = isActive
+					? NODE_OPACITY_ACTIVE
+					: hoveredIndex === null
+						? NODE_OPACITY
+						: NODE_OPACITY * 0.6;
 
 				materials.forEach((material) => {
 					material.opacity += (targetOpacity - material.opacity) * 0.18;
-					material.emissiveIntensity += (targetGlow - material.emissiveIntensity) * 0.18;
 				});
 			});
 

@@ -1,4 +1,4 @@
-export type PlanetRoute = '/about' | '/contact' | '/art-cv' | '/blog' | '/products';
+export type PlanetRoute = '/about' | '/art' | '/climbing' | '/products' | '/contact';
 
 export type PlanetNavItem = {
 	label: string;
@@ -13,30 +13,31 @@ export type PlanetHotspot = PlanetNavItem & {
 	visible: boolean;
 };
 
+// The order matches the orbit nodes in planet.glb (Sphere, Sphere.001 ... Sphere.004).
 export const PLANET_NAV_ITEMS: PlanetNavItem[] = [
 	{
 		label: 'About',
 		href: '/about',
-		description: 'Image reel, studio text and blog box.'
+		description: 'who · what · where · photos'
 	},
 	{
-		label: 'Contact',
-		href: '/contact',
-		description: 'Direct ways to get in touch.'
+		label: 'Art',
+		href: '/art',
+		description: 'metal · painting · digital form · exhibitions'
 	},
 	{
-		label: 'CV',
-		href: '/art-cv',
-		description: 'Practice summary and CV structure.'
-	},
-	{
-		label: 'Blog',
-		href: '/blog',
-		description: 'Writing, notes and latest updates.'
+		label: 'Climbing',
+		href: '/climbing',
+		description: 'wall building · inspection · route setting'
 	},
 	{
 		label: 'Products',
 		href: '/products',
-		description: 'Products and shop links.'
+		description: 'handforged tools and axes, made to order'
+	},
+	{
+		label: 'Contact',
+		href: '/contact',
+		description: 'email · instagram · youtube · orders'
 	}
 ];

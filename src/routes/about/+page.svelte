@@ -26,147 +26,95 @@
 	}
 </script>
 
-<main aria-label="About page">
-	<section class="content-row">
-		<div class="text-box">
-			<h1>about</h1>
-			<ul class="services">
-				<li><a href="/art">Art</a></li>
-				<li><a href="/climbing">Climbing</a></li>
+<svelte:head>
+	<title>about · ione</title>
+</svelte:head>
+
+<main class="page" aria-label="About page">
+	<header>
+		<h1 class="page-title">about</h1>
+	</header>
+
+	<section class="intro">
+		<div class="text">
+			<p class="lede">
+				I'm Espen Tangen Samuelsen, an artist, blacksmith and climbing wall builder based in
+				Sandve on Karmøy.
+			</p>
+			<p>
+				I trained in metal art and digital form at the Oslo National Academy of the Arts (KHiO), and
+				I have spent more than 25 years in climbing: setting routes for national and international
+				competitions, coaching, and building climbing walls across Norway.
+			</p>
+			<p>
+				In the barn I have a smithy, a CNC machine and a 3D printer. Through my company Tangen Tang I
+				take on art commissions, metalwork, handforged tools, and the building, inspection and repair
+				of climbing walls.
+			</p>
+
+			<ul class="links">
+				<li><a href="/art">art</a></li>
+				<li><a href="/climbing">climbing</a></li>
+				<li><a href="/art-cv">cv</a></li>
+				<li><a href="/products">products</a></li>
+				<li><a href="/blog">blog</a></li>
 			</ul>
 		</div>
 
-		<div class="photo-frame-wrap">
+		<div class="photo-frame" class:empty={loading || !!error || !photos.length}>
 			{#if loading}
-				<div class="photo-frame empty"><p class="status">Loading...</p></div>
+				<p class="status">loading…</p>
 			{:else if error}
-				<div class="photo-frame empty"><p class="status">{error}</p></div>
+				<p class="status">{error}</p>
 			{:else if photos.length}
-				<div class="photo-frame">
-					<img src={photos[current]} alt="Studio moment" />
-					{#if photos.length > 1}
-						<button class="nav prev" on:click={prev} aria-label="Previous photo">&#8249;</button>
-						<button class="nav next" on:click={next} aria-label="Next photo">&#8250;</button>
-						<div class="dots">
-							{#each photos as _, i}
-								<button
-									class="dot{i === current ? ' active' : ''}"
-									on:click={() => { current = i; }}
-									aria-label="Photo {i + 1}"
-								></button>
-							{/each}
-						</div>
-					{/if}
-				</div>
+				<img src={photos[current]} alt="From the studio and smithy" />
+				{#if photos.length > 1}
+					<button class="nav prev" on:click={prev} aria-label="Previous photo">&#8249;</button>
+					<button class="nav next" on:click={next} aria-label="Next photo">&#8250;</button>
+					<p class="counter">{current + 1} / {photos.length}</p>
+				{/if}
 			{:else}
-				<div class="photo-frame empty"><p class="status">No photos yet.</p></div>
+				<p class="status">No photos yet.</p>
 			{/if}
 		</div>
 	</section>
 </main>
 
 <style>
-	main {
-		min-height: 100vh;
-		background: var(--bg-color, #e8e8e5);
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		padding: clamp(5rem, 8vw, 6rem) 1.5rem 2rem;
-	}
-
-	.content-row {
+	.intro {
 		display: grid;
-		grid-template-columns: 1fr 1fr;
+		grid-template-columns: 1.1fr 1fr;
 		gap: 2.5rem;
-		align-items: center;
-		width: min(900px, 100%);
+		align-items: start;
 	}
 
-	.text-box {
-		padding: clamp(1.3rem, 3vw, 2rem);
-		background: rgba(255, 255, 255, 0.45);
-		border: 1px solid rgba(117, 98, 68, 0.28);
-		border-radius: 16px;
-		box-shadow: 0 10px 26px rgba(44, 37, 25, 0.08);
-		display: grid;
-		gap: 1.25rem;
-		opacity: 0;
-		animation: float-in-left 480ms ease forwards;
+	.text p {
+		margin: 0 0 1rem;
+		max-width: 60ch;
 	}
 
-	h1 {
-		margin: 0;
-		font-size: clamp(1.35rem, 3vw, 1.95rem);
-		font-weight: 600;
-		letter-spacing: 0.02em;
-		text-transform: lowercase;
-		color: rgba(88, 73, 46, 0.96);
-	}
-
-	.services {
+	.links {
 		list-style: none;
-		margin: 0;
-		padding: 0;
-		display: grid;
-		gap: 0.7rem;
-	}
-
-	.services li {
-		font-family: 'Courier New', Courier, monospace;
-		font-size: clamp(0.95rem, 2vw, 1.1rem);
-		font-weight: 600;
-		letter-spacing: 0.02em;
-		padding-left: 1.1em;
-		position: relative;
-	}
-
-	.services a {
-		color: rgba(88, 73, 46, 0.92);
-		text-decoration: none;
-	}
-
-	.services a:hover,
-	.services a:focus-visible {
-		text-decoration: underline;
-	}
-
-	.services li::before {
-		content: '>';
-		position: absolute;
-		left: 0;
-		color: rgba(88, 73, 46, 0.5);
-	}
-
-	.photo-frame-wrap {
+		margin: 1.5rem 0 0;
+		padding: 1rem 0 0;
+		border-top: var(--line);
 		display: flex;
-		justify-content: center;
+		flex-wrap: wrap;
+		gap: 0.5rem 1.4rem;
+	}
+
+	.links li::before {
+		content: '> ';
+		color: var(--ink-soft);
 	}
 
 	.photo-frame {
 		position: relative;
 		width: 100%;
-		max-width: 380px;
 		aspect-ratio: 4 / 5;
-		border-radius: 16px;
+		border: var(--line);
+		background: #f4f4f4;
 		overflow: hidden;
-		border: 1px solid rgba(117, 98, 68, 0.35);
-		background: rgba(255, 255, 255, 0.42);
-		box-shadow: 0 14px 32px rgba(44, 37, 25, 0.14);
-		opacity: 0;
-		animation: float-in-right 560ms ease 120ms forwards;
-	}
-
-	.photo-frame img {
-		width: 100%;
-		height: 100%;
-		object-fit: contain;
-		display: block;
-		transition: transform 260ms ease;
-	}
-
-	.photo-frame:hover img {
-		transform: scale(1.02);
 	}
 
 	.photo-frame.empty {
@@ -175,110 +123,62 @@
 		justify-content: center;
 	}
 
+	.photo-frame img {
+		width: 100%;
+		height: 100%;
+		object-fit: contain;
+		display: block;
+		filter: grayscale(0.15);
+	}
+
 	.status {
 		margin: 0;
-		font-size: 0.96rem;
 	}
 
 	.nav {
 		position: absolute;
 		top: 50%;
 		transform: translateY(-50%);
-		background: rgba(244, 239, 230, 0.72);
-		border: 1px solid rgba(177, 161, 131, 0.4);
-		border-radius: 50%;
-		width: 2.2rem;
-		height: 2.2rem;
+		width: 2.4rem;
+		height: 2.4rem;
+		padding: 0;
+		border: var(--line);
+		background: var(--paper);
+		color: var(--ink);
 		font-size: 1.5rem;
 		line-height: 1;
-		color: rgba(88, 73, 46, 0.9);
 		cursor: pointer;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		padding: 0;
-		backdrop-filter: blur(2px);
-		transition: background 0.2s;
 	}
 
-	.nav:hover {
-		background: rgba(244, 239, 230, 0.95);
+	.nav:hover,
+	.nav:focus-visible {
+		background: var(--ink);
+		color: var(--paper);
 	}
 
-	.nav.prev { left: 0.6rem; }
-	.nav.next { right: 0.6rem; }
+	.nav.prev {
+		left: 0.6rem;
+	}
 
-	.dots {
+	.nav.next {
+		right: 0.6rem;
+	}
+
+	.counter {
 		position: absolute;
-		bottom: 0.7rem;
-		left: 50%;
-		transform: translateX(-50%);
-		display: flex;
-		gap: 0.4rem;
+		right: 0.6rem;
+		bottom: 0.5rem;
+		margin: 0;
+		padding: 0.1rem 0.45rem;
+		background: var(--paper);
+		border: var(--line);
+		font-size: 0.8rem;
 	}
 
-	.dot {
-		width: 0.45rem;
-		height: 0.45rem;
-		border-radius: 50%;
-		background: rgba(255, 255, 255, 0.55);
-		border: 1px solid rgba(117, 98, 68, 0.4);
-		cursor: pointer;
-		padding: 0;
-		transition: background 0.2s;
-	}
-
-	.dot.active {
-		background: rgba(88, 73, 46, 0.85);
-	}
-
-	@keyframes float-in-left {
-		from {
-			opacity: 0;
-			transform: translateX(-14px);
-		}
-		to {
-			opacity: 1;
-			transform: translateX(0);
-		}
-	}
-
-	@keyframes float-in-right {
-		from {
-			opacity: 0;
-			transform: translateX(14px);
-		}
-		to {
-			opacity: 1;
-			transform: translateX(0);
-		}
-	}
-
-	@media (prefers-reduced-motion: reduce) {
-		.text-box,
-		.photo-frame {
-			animation: none;
-			opacity: 1;
-		}
-
-		.photo-frame img {
-			transition: none;
-		}
-	}
-
-	@media (max-width: 680px) {
-		main {
-			padding: 5rem 1rem 2rem;
-			align-items: start;
-		}
-
-		.content-row {
+	@media (max-width: 760px) {
+		.intro {
 			grid-template-columns: 1fr;
 			gap: 1.5rem;
-		}
-
-		.photo-frame {
-			max-width: 100%;
 		}
 	}
 </style>

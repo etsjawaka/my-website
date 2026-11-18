@@ -1,91 +1,71 @@
-<script lang="ts">
-</script>
+<svelte:head>
+	<title>climbing · ione</title>
+</svelte:head>
 
-<main aria-label="Climbing page">
-	<section class="page-panel">
-		<h1>climbing</h1>
-		<p>Routes, movement, and the mountain rhythm that shapes the work.</p>
-		<div class="card-grid">
+<main class="page" aria-label="Climbing page">
+	<header>
+		<h1 class="page-title">climbing</h1>
+		<p class="lede">
+			More than 25 years in climbing: route setting, coaching, and building, inspecting and repairing
+			climbing walls.
+		</p>
+	</header>
+
+	<section>
+		<h2 class="section-title">services</h2>
+		<div class="grid">
 			<article class="card">
-				<h2>focus</h2>
-				<p>Technical climbing, long days outdoors, and a steady interest in terrain and movement.</p>
+				<h3>wall building</h3>
+				<p>
+					Climbing walls and competition walls, from start to finish. Today together with Frictionwalls,
+					and for twenty years with Tjelmeland Friksjon, also as project and logistics manager.
+				</p>
 			</article>
 			<article class="card">
-				<h2>approach</h2>
-				<p>Measured, physical, and exploratory — with the same attention to detail found in the studio.</p>
+				<h3>inspection & repair</h3>
+				<p>
+					Inspection and repair of climbing walls for Norsk Klatreveggservice, done through my company
+					Tangen Tang.
+				</p>
+			</article>
+			<article class="card">
+				<h3>route setting</h3>
+				<p>
+					Competition route setter in climbing and bouldering since 2000, for national and
+					international competitions.
+				</p>
 			</article>
 		</div>
-		<p class="back-link"><a href="/about">Back to about</a></p>
+	</section>
+
+	<section>
+		<h2 class="section-title">experience</h2>
+		<ul class="list">
+			<li>
+				<span class="year">now</span><span
+					>Wall building with Frictionwalls · inspection and repair through Tangen Tang</span
+				>
+			</li>
+			<li>
+				<span class="year">2006–2025</span><span
+					>Tjelmeland Friksjon: climbing wall installer, later project and logistics manager</span
+				>
+			</li>
+			<li>
+				<span class="year">2003–2017</span><span
+					>Norges Klatreforbund: club developer and route setter</span
+				>
+			</li>
+			<li>
+				<span class="year">coaching</span><span
+					>Tromsø Klatreklubb · Kolsås Klatreklubb · Tyrili Klatresenter · Haugaland Klatrelag</span
+				>
+			</li>
+		</ul>
+	</section>
+
+	<section class="cta">
+		<h2 class="section-title">need a wall built or checked?</h2>
+		<a class="button" href="/contact?subject=Climbing%20wall">get in touch</a>
 	</section>
 </main>
-
-<style>
-	main {
-		min-height: 100vh;
-		background: var(--bg-color, #e8e8e5);
-		display: grid;
-		grid-template-rows: auto 1fr;
-		gap: 1.5rem;
-		padding: clamp(4.8rem, 8vw, 5.8rem) 1rem 2rem;
-	}
-
-	.page-panel {
-		width: min(920px, 100%);
-		justify-self: center;
-		display: grid;
-		gap: 0.9rem;
-		padding: clamp(1rem, 2.8vw, 1.35rem);
-		border: 1px solid rgba(117, 98, 68, 0.35);
-		border-radius: 18px;
-		background: rgba(255, 255, 255, 0.45);
-		box-shadow: 0 10px 24px rgba(44, 37, 25, 0.08);
-	}
-
-	h1 {
-		margin: 0;
-		font-size: clamp(1.35rem, 3vw, 1.95rem);
-		font-weight: 600;
-		letter-spacing: 0.02em;
-		text-transform: lowercase;
-		color: rgba(88, 73, 46, 0.96);
-	}
-
-	p {
-		margin: 0;
-		line-height: 1.5;
-	}
-
-	.card-grid {
-		display: grid;
-		grid-template-columns: repeat(2, minmax(0, 1fr));
-		gap: 0.8rem;
-	}
-
-	.card {
-		padding: 0.8rem;
-		border-radius: 12px;
-		border: 1px solid rgba(117, 98, 68, 0.25);
-		background: rgba(248, 246, 241, 0.7);
-	}
-
-	h2 {
-		margin: 0 0 0.45rem;
-		font-size: 0.95rem;
-		text-transform: lowercase;
-		letter-spacing: 0.02em;
-	}
-
-	.back-link {
-		padding-top: 0.3rem;
-	}
-
-	a {
-		color: rgba(88, 73, 46, 0.96);
-	}
-
-	@media (max-width: 640px) {
-		.card-grid {
-			grid-template-columns: 1fr;
-		}
-	}
-</style>
