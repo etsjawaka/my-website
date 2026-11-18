@@ -8,7 +8,7 @@
 
 	onMount(async () => {
 		try {
-			const res = await fetch('/api/photos');
+			const res = await fetch(`/api/photos?v=${Date.now()}`, { cache: 'no-store' });
 			if (!res.ok) throw new Error('Failed to fetch photos.');
 			photos = (await res.json()) as string[];
 		} catch {
@@ -31,13 +31,8 @@
 		<div class="text-box">
 			<h1>about</h1>
 			<ul class="services">
-				<li>Handforged tools made on demand</li>
-				<li>Metalwork</li>
-				<li>Tools repair</li>
-				<li>Metalart</li>
-				<li>3D drawing</li>
-				<li>CNC CAD</li>
-				<li>3D print</li>
+				<li><a href="/art">Art</a></li>
+				<li><a href="/climbing">Climbing</a></li>
 			</ul>
 		</div>
 
@@ -121,10 +116,19 @@
 		font-family: 'Courier New', Courier, monospace;
 		font-size: clamp(0.95rem, 2vw, 1.1rem);
 		font-weight: 600;
-		color: rgba(88, 73, 46, 0.92);
 		letter-spacing: 0.02em;
 		padding-left: 1.1em;
 		position: relative;
+	}
+
+	.services a {
+		color: rgba(88, 73, 46, 0.92);
+		text-decoration: none;
+	}
+
+	.services a:hover,
+	.services a:focus-visible {
+		text-decoration: underline;
 	}
 
 	.services li::before {

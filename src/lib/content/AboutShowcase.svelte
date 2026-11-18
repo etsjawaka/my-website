@@ -74,7 +74,7 @@
 	onMount(() => {
 		const init = async () => {
 			try {
-				const response = await fetch('/api/photos');
+				const response = await fetch(`/api/photos?v=${Date.now()}`, { cache: 'no-store' });
 				const list = (await response.json()) as string[];
 				photos = Array.isArray(list)
 					? list.map((src: string) => ({
