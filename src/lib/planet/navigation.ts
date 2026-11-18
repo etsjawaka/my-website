@@ -18,7 +18,7 @@ export const PLANET_NAV_ITEMS: PlanetNavItem[] = [
 	{
 		label: 'About',
 		href: '/about',
-		description: 'who · what · where · photos'
+		description: 'disciplines · mediums'
 	},
 	{
 		label: 'Art',
