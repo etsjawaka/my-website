@@ -149,8 +149,10 @@
 
 	<nav class="text-menu" aria-label="Main menu">
 		{#each PLANET_NAV_ITEMS as item, index (item.href)}
+			<!-- Full page load, like the planet nodes: client-side navigation away from the 3D canvas stalls. -->
 			<a
 				href={item.href}
+				data-sveltekit-reload
 				class:active={hoveredIndex === index}
 				on:mouseenter={() => menuEnter(index)}
 				on:mouseleave={menuLeave}
