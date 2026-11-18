@@ -166,8 +166,10 @@
 <style>
 	.planet-shell {
 		position: relative;
+		/* Visible screen height. 100vh alone includes the area behind a phone's browser bar,
+		   which pushed the bottom menu off screen. */
+		height: 100vh;
 		height: 100dvh;
-		min-height: 100vh;
 		overflow: hidden;
 		display: flex;
 		flex-direction: column;
