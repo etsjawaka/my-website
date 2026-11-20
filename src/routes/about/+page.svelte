@@ -47,13 +47,13 @@
 				>
 			</li>
 			<li>
-				<a href="https://www.youtube.com/@raebegnirb/videos" target="_blank" rel="noopener noreferrer"
-					>videos · ET SAMU on YouTube &#8599;</a
+				<a href="https://www.youtube.com/@galaxiuschaos" target="_blank" rel="noopener noreferrer"
+					>shorts · @galaxiuschaos on YouTube &#8599;</a
 				>
 			</li>
 			<li>
-				<a href="https://www.youtube.com/@galaxiuschaos" target="_blank" rel="noopener noreferrer"
-					>shorts · @galaxiuschaos on YouTube &#8599;</a
+				<a href="https://www.youtube.com/@raebegnirb/videos" target="_blank" rel="noopener noreferrer"
+					>videos · ET SAMU on YouTube &#8599;</a
 				>
 			</li>
 		</ul>

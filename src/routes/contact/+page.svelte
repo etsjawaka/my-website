@@ -38,36 +38,38 @@
 		<p class="lede">Commissions, climbing walls, tools or just a question. Get in touch.</p>
 	</header>
 
-	<section class="grid">
-		<article class="card">
-			<h3>email</h3>
-			<p><a href="mailto:{emailTarget}">{emailTarget}</a></p>
-		</article>
-		<article class="card">
-			<h3>social</h3>
-			<p>
-				YouTube:
-				<a href="https://www.youtube.com/@galaxiuschaos" target="_blank" rel="noreferrer"
-					>@galaxiuschaos</a
-				>
-			</p>
-			<p>
-				YouTube:
-				<a href="https://www.youtube.com/@raebegnirb/videos" target="_blank" rel="noreferrer"
-					>ET SAMU (@raebegnirb)</a
-				>
-			</p>
-			<p>
-				Instagram:
-				<a href="https://www.instagram.com/dobbel_smultring" target="_blank" rel="noreferrer"
-					>@dobbel_smultring</a
-				>
-			</p>
-		</article>
-		<article class="card">
-			<h3>location</h3>
-			<p>Sandve, Karmøy, Norway</p>
-		</article>
+	<section>
+		<h2 class="section-title">reach me</h2>
+		<div class="grid">
+			<article class="card">
+				<h3>email</h3>
+				<p><a href="mailto:{emailTarget}">{emailTarget}</a></p>
+			</article>
+			<article class="card">
+				<h3>social</h3>
+				<ul class="links">
+					<li>
+						<a href="https://www.youtube.com/@galaxiuschaos" target="_blank" rel="noopener noreferrer"
+							>shorts · @galaxiuschaos on YouTube &#8599;</a
+						>
+					</li>
+					<li>
+						<a href="https://www.youtube.com/@raebegnirb/videos" target="_blank" rel="noopener noreferrer"
+							>videos · ET SAMU on YouTube &#8599;</a
+						>
+					</li>
+					<li>
+						<a href="https://www.instagram.com/dobbel_smultring" target="_blank" rel="noopener noreferrer"
+							>@dobbel_smultring on Instagram &#8599;</a
+						>
+					</li>
+				</ul>
+			</article>
+			<article class="card">
+				<h3>location</h3>
+				<p>Sandve, Karmøy, Norway</p>
+			</article>
+		</div>
 	</section>
 
 	<section>
@@ -96,6 +98,14 @@
 </main>
 
 <style>
+	.links {
+		list-style: none;
+		margin: 0;
+		padding: 0;
+		display: grid;
+		gap: 0.4rem;
+	}
+
 	.contact-form {
 		display: grid;
 		grid-template-columns: 1fr 1fr;

@@ -35,6 +35,7 @@
 	</header>
 
 	<section aria-live="polite">
+		<h2 class="section-title">latest short</h2>
 		{#if loading}
 			<p>loading latest short…</p>
 		{:else if error}

@@ -40,40 +40,47 @@
 		</p>
 	</header>
 
-	<section class="product-grid">
-		{#each products as product (product.name)}
-			<article class="product">
-				<div class="image">
-					<img
-						src={product.image}
-						alt={product.alt}
-						loading="lazy"
-						class:fit-contain={product.imageFit === 'contain'}
-					/>
-				</div>
-				<div class="info">
-					<h2>{product.name}</h2>
-					<p>{product.description}</p>
-					<p class="price">{product.price}</p>
-					<a
-						class="button"
-						href={`/contact?subject=${encodeURIComponent(`Order request: ${product.name}`)}&message=${encodeURIComponent(`Hi, I want to buy ${product.name}. Price: ${product.price}.`)}`}
-					>
-						order
-					</a>
-				</div>
-			</article>
-		{/each}
+	<section>
+		<h2 class="section-title">made to order</h2>
+		<div class="product-grid">
+			{#each products as product (product.name)}
+				<article class="product">
+					<div class="image">
+						<img
+							src={product.image}
+							alt={product.alt}
+							loading="lazy"
+							class:fit-contain={product.imageFit === 'contain'}
+						/>
+					</div>
+					<div class="info">
+						<h3>{product.name}</h3>
+						<p>{product.description}</p>
+						<p class="price">{product.price}</p>
+						<a
+							class="button"
+							href={`/contact?subject=${encodeURIComponent(`Order request: ${product.name}`)}&message=${encodeURIComponent(`Hi, I want to buy ${product.name}. Price: ${product.price}.`)}`}
+						>
+							order
+						</a>
+					</div>
+				</article>
+			{/each}
+		</div>
 	</section>
 
-	<p>Looking for something else? Custom tools and repairs are welcome. <a href="/contact">Ask me.</a></p>
-
-	<p>
-		More 3D-printable designs, free to download:
-		<a href="https://www.thingiverse.com/espen/designs" target="_blank" rel="noopener noreferrer"
-			>Thingiverse &#8599;</a
-		>
-	</p>
+	<section>
+		<h2 class="section-title">more</h2>
+		<ul class="links">
+			<li>Looking for something else? Custom tools and repairs are welcome. <a href="/contact">Ask me.</a></li>
+			<li>
+				More 3D-printable designs, free to download:
+				<a href="https://www.thingiverse.com/espen/designs" target="_blank" rel="noopener noreferrer"
+					>Thingiverse &#8599;</a
+				>
+			</li>
+		</ul>
+	</section>
 </main>
 
 <style>
@@ -112,7 +119,7 @@
 		align-content: start;
 	}
 
-	h2 {
+	.info h3 {
 		margin: 0;
 		font-size: 1.4rem;
 		text-transform: lowercase;
@@ -120,6 +127,14 @@
 
 	.info p {
 		margin: 0;
+	}
+
+	.links {
+		list-style: none;
+		margin: 0;
+		padding: 0;
+		display: grid;
+		gap: 0.5rem;
 	}
 
 	.price {
