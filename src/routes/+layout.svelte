@@ -30,6 +30,7 @@
 					>{item.label.toLowerCase()}</a
 				>
 			{/each}
+			<a href="/blog" class:current={$page.url.pathname.startsWith('/blog')}>blog</a>
 		</nav>
 	</header>
 {/if}
