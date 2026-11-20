@@ -33,7 +33,7 @@ export const GET: RequestHandler = async () => {
 
 		const payload = {
 			videoId,
-			embedUrl: `https://www.youtube.com/embed/${videoId}`,
+			embedUrl: `https://www.youtube-nocookie.com/embed/${videoId}`,
 			watchUrl: `https://www.youtube.com/shorts/${videoId}`
 		};
 

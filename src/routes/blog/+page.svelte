@@ -53,9 +53,8 @@
 				<iframe
 					src={latestShort.embedUrl}
 					title="Latest YouTube short from galaxiuschaos"
-					loading="lazy"
 					referrerpolicy="strict-origin-when-cross-origin"
-					allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+					allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
 					allowfullscreen
 				></iframe>
 			</div>
@@ -71,11 +70,10 @@
 		<h2 class="section-title">selvrefererende_dings · ET SAMU</h2>
 		<div class="video-shell wide">
 			<iframe
-				src="https://www.youtube.com/embed/{samuVideoId}"
+				src="https://www.youtube-nocookie.com/embed/{samuVideoId}"
 				title="selvrefererende_dings by ET SAMU"
-				loading="lazy"
 				referrerpolicy="strict-origin-when-cross-origin"
-				allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+				allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
 				allowfullscreen
 			></iframe>
 		</div>
