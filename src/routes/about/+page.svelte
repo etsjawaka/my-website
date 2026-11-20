@@ -38,6 +38,16 @@
 						>3D designs (Thingiverse) &#8599;</a
 					>
 				</li>
+				<li>
+					<a href="https://www.youtube.com/@raebegnirb/videos" target="_blank" rel="noopener noreferrer"
+						>Videos (ET SAMU on YouTube) &#8599;</a
+					>
+				</li>
+				<li>
+					<a href="https://www.youtube.com/@galaxiuschaos" target="_blank" rel="noopener noreferrer"
+						>Shorts (@galaxiuschaos on YouTube) &#8599;</a
+					>
+				</li>
 			</ul>
 		</div>
 

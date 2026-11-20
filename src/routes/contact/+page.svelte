@@ -52,6 +52,12 @@
 				>
 			</p>
 			<p>
+				YouTube:
+				<a href="https://www.youtube.com/@raebegnirb/videos" target="_blank" rel="noreferrer"
+					>ET SAMU (@raebegnirb)</a
+				>
+			</p>
+			<p>
 				Instagram:
 				<a href="https://www.instagram.com/dobbel_smultring" target="_blank" rel="noreferrer"
 					>@dobbel_smultring</a
